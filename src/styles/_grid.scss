@@ -1,0 +1,331 @@
+// COLUMN GHOST
+.m-grid-temp-container .m-grid-column-ghost {
+  padding: 8px 12px;
+  background: $grid-column-ghost-bg;
+  color: $grid-column-ghost-color;
+  box-shadow: $grid-column-ghost-shadow;
+  
+  cursor: default;
+  position: absolute;
+  z-index: 100000;
+}
+
+.m-grid {
+  position: relative;
+  clear: both;
+  font-size: $font-size-base;
+    
+  // NORMALIZE
+  table {
+    border-spacing: 0;
+    border-collapse: collapse;
+  }
+  * {
+    box-sizing: border-box;
+  }
+    
+  // GENERAL
+  .m-alert {
+    border-radius: 0;
+  }
+  .m-grid-std-padding {
+    padding: 8px;
+  }
+  .m-grid-left-marker {
+    background-color: $grid-dnd-marker-color;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    z-index: 1;
+  }
+  .m-grid-right-marker {
+    background-color: $grid-dnd-marker-color;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    z-index: 1;
+  }
+  table {
+    width: 100%;
+    border: 1px solid $grid-border-color;
+    
+    td, th {
+      padding: 0px;
+      vertical-align: top;
+      border: 1px solid $grid-border-color;
+    }
+        
+    tbody td {
+      padding: 8px;
+      font-size: 13px;
+    }
+    
+    tbody tr.m-grid-data-row:not(:last-of-type) td {
+      border-bottom: lighten($grid-border-color, 8%) solid 1px;
+    }
+  }
+  
+  // LOADING
+  &.m-grid-initializing .m-grid-standard-loading {
+    display: table-row;
+  }
+  &.m-grid-initialized.m-grid-loading .m-grid-background-loading {
+    display: table-row;
+  }
+  .m-grid-empty td {
+    font-size: 1.7em;
+    text-align: center;
+    padding: 50px;
+  }
+  .m-grid-standard-loading {
+    display: none;
+
+    td {
+      text-align: center;
+      padding: 100px;
+      
+      .m-grid-loading-icon {
+        display: inline-block;
+        background-image: url("../assets/loader.gif");
+        width: 48px;
+        height: 48px;
+      }
+    }
+  }
+  .m-grid-background-loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0.6;
+    background: #FFFFFF;
+    
+    @include no-select;
+  }
+  
+  // HEADINGS
+  .m-grid-headings {
+    @include no-select;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    th {
+      position: relative;
+      font-weight: bold;
+      background: $grid-headings-bg;
+      background-clip: padding-box; // fix for FireFox borders
+    }
+    .m-grid-left-marker {
+      width: 3px;
+      left: -2px;
+    }
+    .m-grid-right-marker {
+      width: 3px;
+      right: -2px;
+    }
+    .m-grid-column {
+      padding: 8px;
+    }
+  }
+  
+  // TOOLBOX
+  .m-toolbox {
+    background: $grid-bg-gray;
+  }
+  
+  // PAGINATION
+  .m-pagination {
+    background: $grid-bg-gray;
+    
+    .m-pagination-arrow {
+      font-stretch: ultra-condensed;
+      padding: 6px 10px;
+    }
+  }
+  
+  // GROUPING
+  .m-grid-headings .m-grid-group-margin {
+    cursor: default;
+    width: 10px;
+  }
+  td.m-grid-group-margin {
+    background-color: $grid-grouping-margin-bg;
+    border-right: none;
+    border-bottom: none;
+    border-top: none;
+  }
+  td.m-grid-group-margin:not(:first-of-type) {
+    border: none;
+  }
+  tr.m-grid-group-row td {
+    background-color: $grid-grouping-margin-bg;
+    color: $grid-grouping-margin-color;
+    border: 1px double $grid-border-color;
+    padding: 10px;
+  }
+  tr.m-grouping {    
+    td {
+      border-color: $grid-grouping-panel-bg;
+      border-bottom: 2px solid $grid-grouping-panel-border-color;
+    }
+    
+    .m-grid-grouping-empty {
+      padding: 10px 12px;
+      
+      &:hover {
+        cursor: default;
+      }                
+    }
+    
+    .m-grid-grouping {
+      background: $grid-grouping-panel-bg;
+      color: $grid-grouping-panel-color;
+      padding-left: 2px;      
+      
+      &:hover {
+        cursor: default;
+      }
+    }
+    
+    .m-grid-column {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      
+      background-color: $grid-grouping-panel-bg-darker;
+      border: none;
+      margin: 4px 0 4px 2px;
+      padding: 6px 20px 6px 10px;      
+      
+      &.m-grid-sort-asc span:after {
+        border-color: transparent transparent $grid-grouping-panel-color transparent;;
+      }
+      &.m-grid-sort-desc span:after {
+        border-color: $grid-grouping-panel-color transparent transparent transparent;;
+      }
+    }
+    
+    .m-grid-grouping-droppable {
+      background-color: darken($grid-grouping-panel-bg, 3%);
+    }
+    
+    .m-grid-left-marker {
+      background-color: $grid-primary-color;
+      width: 2px;
+      left: -4px;
+    }
+    .m-grid-right-marker {
+      background-color: $grid-primary-color;      
+      width: 2px;
+      right: -4px;
+    }
+  }
+
+  // SORTING
+  .m-grid-sort-asc span:after {
+    content: '';
+    width: 0;
+    height: 0;
+
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 5px;
+
+    border-style: solid;
+    border-width: 0 5px 8.7px 5px;
+    border-color: transparent transparent $grid-sorting-icon-color transparent;
+  }
+  .m-grid-sort-desc span:after {
+    content: '';
+    width: 0;
+    height: 0;
+
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 5px;
+
+    border-style: solid;
+    border-width: 10px 5px 0 5px;
+    border-color: $grid-sorting-icon-color transparent transparent transparent;
+  }
+
+  // COLUMN CHOOSER
+  .m-grid-column-chooser {
+    &.m-grid-column-chooser-droppable .m-grid-popup {
+      background-color: $grid-bg-gray;
+    }
+
+    .m-grid-column {
+      padding: 8px 10px;
+      border-left: $grid-border-color solid 1px;
+      border-top: $grid-border-color solid 1px;
+      border-right: $grid-border-color solid 1px;
+
+      cursor: pointer;
+
+      @include no-select;
+    }
+    m-grid-column:last-child .m-grid-column {
+      border-bottom: $grid-border-color solid 1px;
+    }
+  }
+  
+  // QUERY-LANGUAGE
+  .m-query-language {
+    border: none;
+    
+    .m-query-language-editor {
+      input {
+        border:none;
+        border-radius: 0px;
+      }
+      button {
+        padding-top: 7px;
+        padding-bottom: 7px;
+        border-radius: 0px;
+        border-right: none;
+        border-top: none;
+        border-bottom: none;
+      }
+      .mql-editor-completions {
+        border-top: 1px solid $list-border;
+        border-left: none;
+        border-right: none;
+      }
+    }
+  }
+  
+  // ROW FILTERING
+  .m-filter-row {
+    td {
+      border: none;
+      background-color: $grid-bg-gray;
+    }
+    .m-row-filtering-wrapper {      
+      &.m-row-filtering-with-text {
+        margin-bottom: 10px;
+        
+        input {
+          display: block;
+        }
+      }
+      
+      .m-form-control {
+        height: 30px;
+      }
+      
+      input {
+        display: none;
+        border-radius: 0;
+        border-top: 0;
+      }
+      select {
+        border-radius: 0;
+      }
+    }
+  }
+}
