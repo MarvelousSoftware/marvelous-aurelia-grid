@@ -23,7 +23,8 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.35",
     "core-js": "npm:core-js@2.1.0",
     "es6-module-loader": "npm:es6-module-loader@0.17.11",
-    "marvelous-aurelia-core": "npm:marvelous-aurelia-core@dev",
+    "marvelous-aurelia-core": "github:marveloussoftware/marvelous-aurelia-core@0.1.0",
+    "marvelous-aurelia-query-language": "github:marveloussoftware/marvelous-aurelia-query-language@0.1.0",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
@@ -35,6 +36,16 @@ System.config({
     },
     "github:jspm/nodelibs-util@0.1.0": {
       "util": "npm:util@0.10.3"
+    },
+    "github:marveloussoftware/marvelous-aurelia-core@0.1.0": {
+      "aurelia-binding": "npm:aurelia-binding@1.0.0-beta.1.1.3",
+      "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-beta.1.1.3",
+      "aurelia-templating": "npm:aurelia-templating@1.0.0-beta.1.1.1"
+    },
+    "github:marveloussoftware/marvelous-aurelia-query-language@0.1.0": {
+      "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-beta.1.1.3",
+      "aurelia-templating": "npm:aurelia-templating@1.0.0-beta.1.1.1",
+      "marvelous-aurelia-core": "github:marveloussoftware/marvelous-aurelia-core@0.1.0"
     },
     "npm:assert@1.3.0": {
       "util": "npm:util@0.10.3"

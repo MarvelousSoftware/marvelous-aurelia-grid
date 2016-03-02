@@ -34,8 +34,8 @@ export class PaginationComponent extends GridComponent {
     rightSideOutOfRange: false
   };
   
-  options: IOptions;
-  defaultOptions: IOptions = {
+  options: IPaginationOptions;
+  defaultOptions: IPaginationOptions = {
     size: 20,
     all: false,
     range: 4
@@ -129,7 +129,7 @@ export class PaginationComponent extends GridComponent {
     }
   }
   
-  createOptions(): IOptions {
+  createOptions(): IPaginationOptions {
     if(!this._gridOptions.domBased.has('pagination') && !this._gridOptions.codeBased.pagination) {
       return;
     }
@@ -147,7 +147,7 @@ export class PaginationComponent extends GridComponent {
   }  
 }
 
-export interface IOptions {
+export interface IPaginationOptions {
   size?: number;
   all?: boolean|number[];
   range?: number;

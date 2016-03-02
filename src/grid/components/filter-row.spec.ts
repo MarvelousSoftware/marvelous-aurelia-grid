@@ -429,14 +429,14 @@ describe('FilterRow component', () => {
     
     it('should initialize compare operators', () => {
       column = h.getColumn({ nullable: 'false', type: 'number', field: 'foo' });  
-      let initial = FilterRowComponent.prototype.getCompareOperators; 
-      let spy = FilterRowComponent.prototype.getCompareOperators = sinon.spy();
+      let initial = (<any>FilterRowComponent.prototype)._getCompareOperators; 
+      let spy = (<any>FilterRowComponent.prototype)._getCompareOperators = sinon.spy();
       
       let subject = getComponent({ filterRow: true }, ``);
       
       expect(spy.calledOnce).toBe(true);
-      expect(spy.calledWith(subject.type, subject.nullable)).toBe(true)      
-      FilterRowComponent.prototype.getCompareOperators = initial;
+      expect(spy.calledWith(subject.type, subject.nullable)).toBe(true);
+      (<any>FilterRowComponent.prototype)._getCompareOperators = initial;
     });
   });
   
@@ -444,20 +444,20 @@ describe('FilterRow component', () => {
     it('handle all supported types', () => {
       let subject = getComponent({ filterRow: true }, ``);
       
-      expect(subject.getCompareOperators('string', false).length).toBeGreaterThan(0);
-      expect(subject.getCompareOperators('string', true).length).toBeGreaterThan(0);
-      expect(subject.getCompareOperators('number', false).length).toBeGreaterThan(0);
-      expect(subject.getCompareOperators('number', true).length).toBeGreaterThan(0);
-      expect(subject.getCompareOperators('date', false).length).toBeGreaterThan(0);
-      expect(subject.getCompareOperators('date', true).length).toBeGreaterThan(0);
-      expect(subject.getCompareOperators('boolean', false).length).toBeGreaterThan(0);
-      expect(subject.getCompareOperators('boolean', true).length).toBeGreaterThan(0);
+      expect((<any>subject)._getCompareOperators('string', false).length).toBeGreaterThan(0);
+      expect((<any>subject)._getCompareOperators('string', true).length).toBeGreaterThan(0);
+      expect((<any>subject)._getCompareOperators('number', false).length).toBeGreaterThan(0);
+      expect((<any>subject)._getCompareOperators('number', true).length).toBeGreaterThan(0);
+      expect((<any>subject)._getCompareOperators('date', false).length).toBeGreaterThan(0);
+      expect((<any>subject)._getCompareOperators('date', true).length).toBeGreaterThan(0);
+      expect((<any>subject)._getCompareOperators('boolean', false).length).toBeGreaterThan(0);
+      expect((<any>subject)._getCompareOperators('boolean', true).length).toBeGreaterThan(0);
     });
     
     it('should throw on not supported type', () => {
       let subject = getComponent({ filterRow: true }, ``);
       
-      expect(() => { subject.getCompareOperators('foo', false) }).toThrow();
+      expect(() => { (<any>subject)._getCompareOperators('foo', false) }).toThrow();
     });
   });
   
@@ -466,7 +466,7 @@ describe('FilterRow component', () => {
       spyOnRefresh(spy => {
         let subject = getComponent({ filterRow: true }, ``);
       
-        subject.onCompareTextWrite(<any>{ which: 13 });
+        (<any>subject)._onCompareTextWrite(<any>{ which: 13 });
         
         expect(spy.calledOnce).toBe(true);
       });

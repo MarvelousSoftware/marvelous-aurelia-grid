@@ -96,11 +96,11 @@ export class FilterRowComponent extends GridComponent {
   start() {
     this.type = this._column.other.type || 'string';
     this.nullable = this._column.other.nullable !== undefined ? this._column.other.nullable !== 'false' : true;
-    this.compareOperators = this.getCompareOperators(this.type, this.nullable);
+    this.compareOperators = this._getCompareOperators(this.type, this.nullable);
     
     this.subs = [
-      this._dataSource.subscribe('DataRead', params => this.onDataRead(params)),
-      this._aureliaUtils.observe(this, 'selectedCompareOperator', (n,o) => { this.selectedCompareOperatorChanged(n,o); })
+      this._dataSource.subscribe('DataRead', params => this._onDataRead(params)),
+      this._aureliaUtils.observe(this, 'selectedCompareOperator', (n,o) => { this._selectedCompareOperatorChanged(n,o); })
     ]
   }
 
@@ -116,7 +116,7 @@ export class FilterRowComponent extends GridComponent {
   }
   
   loadState(state) {
-    let filtering: IState = state[this._column.getUniqueId()];
+    let filtering: IFilterRowState = state[this._column.getUniqueId()];
     
     if(!filtering) {
       return;
@@ -139,7 +139,7 @@ export class FilterRowComponent extends GridComponent {
     this.selectedCompareOperator = operator[0];
   }
 
-  onDataRead(params: any) {
+  private _onDataRead(params: any) {
     if(!this.selectedCompareOperator) {
       return;
     }
@@ -159,7 +159,7 @@ export class FilterRowComponent extends GridComponent {
     params.filtering[this._column.field] = fieldFilterings;
   }
   
-  getCompareOperators(type: string, nullable: boolean): ICompareOperator[] {
+  private _getCompareOperators(type: string, nullable: boolean): ICompareOperator[] {
     let operators: string[];
     
     switch(type) {
@@ -217,7 +217,7 @@ export class FilterRowComponent extends GridComponent {
     this._gridInternals.refresh();
   }
     
-  selectedCompareOperatorChanged(newOp: ICompareOperator, oldOp: ICompareOperator) {
+  private _selectedCompareOperatorChanged(newOp: ICompareOperator, oldOp: ICompareOperator) {
     if(oldOp === undefined) {
       // first call, no need to react
       return;
@@ -235,7 +235,7 @@ export class FilterRowComponent extends GridComponent {
     }
   }
   
-  onCompareTextWrite(event: KeyboardEvent) {
+  private _onCompareTextWrite(event: KeyboardEvent) {
     if(event.which === 13) {
       // on enter
       this.refresh();
@@ -261,7 +261,7 @@ export class FilterRowComponent extends GridComponent {
   }
 }
 
-export interface IState {
+export interface IFilterRowState {
   selectedCompareOperator: any;
   compareText: string;
 }

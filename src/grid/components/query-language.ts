@@ -21,7 +21,7 @@ export class QueryLanguageComponent extends GridComponent {
     this.editorOptions.onSubmit = () => this.refresh();
     
     this.subs = [
-      this._dataSource.subscribe('DataRead', params => this.onDataRead(params))
+      this._dataSource.subscribe('DataRead', params => this._onDataRead(params))
     ]
   }
 
@@ -33,7 +33,7 @@ export class QueryLanguageComponent extends GridComponent {
     this.queryLanguage.query = state.query;
   }
 
-  onDataRead(params) {
+  private _onDataRead(params) {
     if(!this.queryLanguage || !this.queryLanguage.query) {
       // queryLanguage is defined if view model is attached
       return;

@@ -5,7 +5,7 @@ import {Column, ToolboxComponent, ColumnReorderingComponent, GridComponent,
 
 @inject(GridInternals, GridOptions, ComponentsArray)
 export class ColumnChooserComponent extends GridComponent {
-  options: IOptions;
+  options: IColumnChooserOptions;
   
   hidden = true;
   overDroppable = false;
@@ -15,7 +15,7 @@ export class ColumnChooserComponent extends GridComponent {
     headings: '.m-grid-headings'
   }
   
-  defaultOptions: IOptions = {
+  defaultOptions: IColumnChooserOptions = {
     autoToolboxInit: true
   }
   
@@ -131,7 +131,7 @@ export class ColumnChooserComponent extends GridComponent {
     }));
   }
 
-  createOptions(): IOptions | boolean {
+  createOptions(): IColumnChooserOptions | boolean {
     if(!this._gridOptions.domBased.has('column-chooser') && !this._gridOptions.codeBased.columnChooser) {
       return false;
     }
@@ -146,6 +146,6 @@ export class ColumnChooserComponent extends GridComponent {
   }
 }
 
-export interface IOptions {
+export interface IColumnChooserOptions {
   autoToolboxInit: boolean;
 }

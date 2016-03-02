@@ -11,14 +11,14 @@ import {sortingMode} from '../constants';
 
 @inject(GridOptions, GridInternals, DataSource)
 export class SortingComponent extends GridComponent {
-  options: IOptions;
+  options: ISortingOptions;
   sortOrder = 0;
 
   defaultOptions = {
     mode: sortingMode.single
   };
 
-  buckets: IOwnedBucket[] = [];
+  buckets: ISortingOwnedBucket[] = [];
   subs = [];
 
   constructor(private _gridOptions: GridOptions, private _gridInternals: GridInternals, private _dataSource: DataSource) {
@@ -33,12 +33,12 @@ export class SortingComponent extends GridComponent {
     });
 
     this.subs = [
-      this._gridInternals.subscribe('ColumnClicked', column => this.onColumnClicked(column)),
-      this._dataSource.subscribe('DataRead', params => this.onDataRead(params))
+      this._gridInternals.subscribe('ColumnClicked', column => this._onColumnClicked(column)),
+      this._dataSource.subscribe('DataRead', params => this._onDataRead(params))
     ]
   }
 
-  onDataRead(params) {
+  private _onDataRead(params) {
     params.sortBy = [];
 
     this.buckets.forEach(x => {
@@ -72,7 +72,7 @@ export class SortingComponent extends GridComponent {
     });
   }
 
-  loadState(state: IState) {
+  loadState(state: ISortingState) {
     if (!state || !state.columns || !state.columns.length) {
       return;
     }
@@ -87,7 +87,7 @@ export class SortingComponent extends GridComponent {
     this._gridInternals.refresh();
   }
 
-  onColumnClicked(column: Column) {
+  private _onColumnClicked(column: Column) {
     let isSortingEnabled = column.other.sortable !== undefined && column.other.sortable !== "false" && column.other.sortable !== false;
     if (!isSortingEnabled) {
       return;
@@ -252,12 +252,11 @@ export class SortingBucket {
         break;
       default:
         throw new Error(`${direction} is not a valid value for a column sort direction.`);
-        break;
     }
   }
 }
 
-export interface IOwnedBucket {
+export interface ISortingOwnedBucket {
   owner: Function,
   bucket: SortingBucket,
   order: number
@@ -268,16 +267,16 @@ export interface IColumnWithSorting {
   direction?: string
 }
 
-export interface IState {
-  columns: IColumnState[]
+export interface ISortingState {
+  columns: ISortingColumnState[]
 }
 
-export interface IColumnState {
+export interface ISortingColumnState {
   id: string,
   direction: string
 }
 
-export interface IOptions {
+export interface ISortingOptions {
   mode: string;
 }
 

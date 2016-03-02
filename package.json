@@ -65,16 +65,18 @@
       "lib": "dist/amd"
     },
     "dependencies": {
-      "aurelia-binding": "^1.0.0-beta.1.1.3",
-      "aurelia-dependency-injection": "^1.0.0-beta.1.1.3",
-      "aurelia-templating": "^1.0.0-beta.1.1.1"
+      "aurelia-binding": "npm:aurelia-binding@^1.0.0-beta.1.1.3",
+      "aurelia-dependency-injection": "npm:aurelia-dependency-injection@^1.0.0-beta.1.1.3",
+      "aurelia-templating": "npm:aurelia-templating@^1.0.0-beta.1.1.1",
+      "marvelous-aurelia-core": "marveloussoftware/marvelous-aurelia-core@^0.1.0",
+      "marvelous-aurelia-query-language": "marveloussoftware/marvelous-aurelia-query-language@^0.1.0"
     },
     "devDependencies": {
-      "aurelia-pal-browser": "^1.0.0-beta.1",
-      "babel": "babel-core@^5.8.24",
-      "babel-runtime": "^5.8.24",
-      "core-js": "^2.1.0",
-      "es6-module-loader": "^0.17.8"
+      "aurelia-pal-browser": "npm:aurelia-pal-browser@^1.0.0-beta.1",
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^2.1.0",
+      "es6-module-loader": "npm:es6-module-loader@^0.17.8"
     }
   },
   "marvelous": {

@@ -2,29 +2,6 @@ var pkg = require('../package.json');
 var appRoot = 'src/';
 var jspmPackages = 'jspm_packages';
 
-var getDependencyInfo = function (name, packageName) {
-  packageName = 'marvelous-aurelia-' + (packageName || name);
-  var fullPackageName = packageName + '@dev';
-  var packagesDirectory = jspmPackages + '/github/marveloussoftware/';
-  
-  return {
-    name: name,
-    fullPackageName: fullPackageName,
-    main: 'github:marveloussoftware/' + fullPackageName + '/' + name,
-    packagesDirectory: packagesDirectory,
-    copy: [
-      {
-        src: pkg.marvelous.projects[name] + 'dev/system/**/*.*',
-        dest: packagesDirectory + fullPackageName
-      },
-      {
-        src: pkg.marvelous.projects[name] + 'dev/' + packageName + '.d.ts',
-        dest: 'typings/marvelous-software'
-      }],
-    buildSyncFile: pkg.marvelous.projects[name] + 'dev/buildSyncFile.txt'
-  }
-}
-
 module.exports = {
   root: appRoot,
   javascript: appRoot + '**/*.js',
@@ -48,3 +25,34 @@ module.exports = {
 };
 var deps = module.exports.deps;
 deps.watch = deps.map(function (x) { return x.buildSyncFile; });
+
+function getDependencyInfo (name, packageName) {
+  packageName = 'marvelous-aurelia-' + (packageName || name);
+  var packagesDirectory = jspmPackages + '/github/marveloussoftware/';
+  
+  var jspmPackageDefinition = pkg.jspm.dependencies[packageName];
+  var versionStartIndex = jspmPackageDefinition.indexOf('@');
+  var version = jspmPackageDefinition.substr(versionStartIndex + 1);
+  if(isNaN(parseInt(version[0]))) {
+    version = version.substr(1);
+  }
+  
+  var fullPackageName = packageName + '@' + version;
+  
+  return {
+    name: name,
+    fullPackageName: fullPackageName,
+    main: 'github:marveloussoftware/' + fullPackageName + '/' + name,
+    packagesDirectory: packagesDirectory,
+    copy: [
+      {
+        src: pkg.marvelous.projects[name] + 'dev/system/**/*.*',
+        dest: packagesDirectory + fullPackageName
+      },
+      {
+        src: pkg.marvelous.projects[name] + 'dev/' + packageName + '.d.ts',
+        dest: 'typings/marvelous-software'
+      }],
+    buildSyncFile: pkg.marvelous.projects[name] + 'dev/buildSyncFile.txt'
+  }
+}

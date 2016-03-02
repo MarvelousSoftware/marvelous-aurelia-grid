@@ -210,7 +210,7 @@ describe('Sorting', () => {
         columns.firstName.other.sortable = true;
         component.sortOrder = 99;
         
-        component.onColumnClicked(columns.firstName);
+        (<any>component)._onColumnClicked(columns.firstName);
         
         expect(columns.firstName.state.sortOrder).toBe(100);
         expect(columns.firstName.state.sortByDirection).toBe('asc');
@@ -221,9 +221,9 @@ describe('Sorting', () => {
         component = getComponent({ sorting: true }, ``);
         columns.firstName.other.sortable = true;
         component.sortOrder = 99;
-        component.onColumnClicked(columns.firstName);
+        (<any>component)._onColumnClicked(columns.firstName);
         
-        component.onColumnClicked(columns.firstName);
+        (<any>component)._onColumnClicked(columns.firstName);
         
         expect(columns.firstName.state.sortOrder).toBe(100);
         expect(columns.firstName.state.sortByDirection).toBe('desc');
@@ -235,7 +235,7 @@ describe('Sorting', () => {
         
         let test = (sortable: any) => {
           columns.firstName.other.sortable = sortable;
-          component.onColumnClicked(columns.firstName);
+          (<any>component)._onColumnClicked(columns.firstName);
           expect(h.gridInternals.refresh.called).toBe(false);
         };
         

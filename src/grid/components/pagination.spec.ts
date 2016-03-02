@@ -1,9 +1,9 @@
-import {PaginationComponent, IOptions} from './pagination';
+import {PaginationComponent, IPaginationOptions} from './pagination';
 import {GridTestHelpers} from '../../unitTesting/grid/base';
 
 describe('Pagination component', () => {
   let h: GridTestHelpers;
-  let getComponent = (codeBased: IOptions, domBased: string) => {
+  let getComponent = (codeBased: IPaginationOptions, domBased: string) => {
     let gridOptions = h.getGridOptions({ pagination: codeBased }, domBased + `<columns><column field="Name"></column></columns>`);
     return new PaginationComponent(<any>h.dataSource, <any>h.aureliaUtils, <any>h.gridInternals, gridOptions);
   }
@@ -193,7 +193,7 @@ describe('Pagination component', () => {
     type resultType = {
       selected: number, items: number[], total: number, buttons: any, lastPage: number
     };
-    let test = (options: IOptions, result: resultType) => {
+    let test = (options: IPaginationOptions, result: resultType) => {
       let pagination = getComponent(options, ``);
       pagination.tryEnable();
       pagination.selected = result.selected;
