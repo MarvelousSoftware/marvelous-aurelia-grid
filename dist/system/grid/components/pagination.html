@@ -1,0 +1,38 @@
+<template>
+  <div if.bind="items.length">
+    <div class="pull-left m-grid-std-padding">
+      <div class="m-btn-group">
+        <button class="m-btn m-btn-default m-pagination-arrow" disabled.bind="!buttons.prev" click.delegate="selectFirst()" type="button">
+          &lt;&lt;
+        </button><button class="m-btn m-btn-default m-pagination-arrow" disabled.bind="!buttons.prev" click.delegate="selectPrev()" type="button">
+          &lt;
+        </button><button if.bind="buttons.leftSideOutOfRange"
+                click.delegate="changePage(items[0]-1)"
+                class="m-btn m-btn-default"
+                type="button">
+          ...
+        </button><button repeat.for="item of items"
+                click.delegate="$parent.changePage(item)"
+                class="m-btn ${item === $parent.selected ? 'm-btn-primary' : 'm-btn-default'}"
+                type="button">
+          ${item}
+        </button><button if.bind="buttons.rightSideOutOfRange"
+                click.delegate="changePage(items[items.length-1]+1)"
+                class="m-btn m-btn-default"
+                type="button">
+          ...
+        </button><button class="m-btn m-btn-default m-pagination-arrow" disabled.bind="!buttons.next" click.delegate="selectNext()" type="button">
+          &gt;
+        </button><button class="m-btn m-btn-default m-pagination-arrow" disabled.bind="!buttons.next" click.delegate="selectLast()" type="button">
+          &gt;&gt;
+        </button>
+      </div>
+    </div>
+
+    <div if.bind="options.all" class="m-grid-std-padding pull-right">
+      <select class="m-form-control" value.bind="options.size">
+        <option repeat.for="size of options.all" model.bind="size">${size}</option>
+      </select>
+    </div>
+  </div>
+</template>

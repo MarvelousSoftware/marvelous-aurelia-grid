@@ -1,0 +1,12 @@
+<template>
+  <require from="../column"></require>
+
+  <div class="m-grid-grouping ${dragAndDrop.overDroppable ? 'm-grid-grouping-droppable' : ''}">
+    <div if.bind="!columns.length" class="m-grid-grouping-empty">
+      Drag a column header and drop it here to group by that column
+    </div>
+
+    <m-grid-column repeat.for="column of columns" column.bind="column" grid.bind="$parent._gridInternals._grid">
+    </m-grid-column>
+  </div>
+</template>

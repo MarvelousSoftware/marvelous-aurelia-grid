@@ -1,0 +1,9 @@
+<template>
+  <div class="m-grid-column ${column.headerClass}"
+       data-id="${column.id}"
+       data-field="${column.field}"
+       data-heading="${column.heading}"
+       click.delegate="columnClicked()">
+    <span>${column.heading}</span>
+  </div>
+</template>

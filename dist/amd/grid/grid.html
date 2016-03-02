@@ -1,0 +1,81 @@
+<template>
+  <require from="./column"></require>
+
+  <div class="m-grid ${initialized ? 'm-grid-initialized' : 'm-grid-initializing'} ${internals.loading ? 'm-grid-loading' : 'm-grid-loaded'}">
+    <table>
+        <colgroup>
+          <col repeat.for="group of renderer.groups" class="m-grid-group-margin"></col>
+          <col repeat.for="column of internals.mainColumns" css="${column.width !== undefined ? 'width:' + column.width : ''}"><col>
+        </colgroup>
+        <thead>
+          <tr class="${component.name}" repeat.for="component of components.componentsToBeDisplayed.top">
+            <td if.bind="component.layout === 'full'" colspan="${$parent.internals.mainColumns.length+$parent.renderer.groups.length}">
+              <compose view="${component.view}"
+                       view-model.bind="component.instance"></compose>
+            </td>
+            <td if.bind="component.layout === 'forEachColumn'" repeat.for="column of $parent.internals.mainColumns">
+              <compose view="${$parent.component.view}"
+                       view-model.bind="$parent.component.instances.get(column)"></compose>
+            </td>
+          </tr>
+          <tr class="m-grid-headings">
+            <th class="m-grid-group-margin" repeat.for="group of renderer.groups">
+            </th>
+            <th repeat.for="column of internals.mainColumns">
+              <m-grid-column column.bind="column" grid.bind="$parent"></m-grid-column>
+            </th>
+          </tr>
+          <tr class="${component.name}" repeat.for="component of components.componentsToBeDisplayed.afterColumns">
+            <td class="m-grid-group-margin" repeat.for="group of $parent.renderer.groups">
+            </td>
+            <td if.bind="component.layout === 'full'" colspan="${$parent.internals.mainColumns.length+$parent.renderer.groups.length}">
+              <compose view="${component.view}"
+                       view-model.bind="component.instance"></compose>
+            </td>
+            <td if.bind="component.layout === 'forEachColumn'" repeat.for="column of $parent.internals.mainColumns">
+              <compose view="${$parent.component.view}"
+                       view-model.bind="$parent.component.instances.get(column)"></compose>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <!--
+          <tr repeat.for="$item of dataSource.result.data">
+            <td repeat.for="$column of $parent.internals.mainColumns">
+              ${$parent.$item[$column.field]}
+            </td>
+          </tr>
+          -->
+        </tbody>
+        <tfoot>
+          <tr class="m-grid-empty" if.bind="initialized && !internals.loading && (dataSource.result.data.length === 0 || !dataSource.result)">
+            <td colspan="${internals.mainColumns.length}">
+              No records found.
+            </td>
+          </tr>
+          <tr class="m-grid-standard-loading">
+            <td colspan="${internals.mainColumns.length}">
+              <div class="m-grid-loading-icon"></div>
+            </td>
+          </tr>
+          <tr class="${component.name}" repeat.for="component of components.componentsToBeDisplayed.footer">
+            <td if.bind="component.layout === 'full'" colspan="${$parent.internals.mainColumns.length+$parent.renderer.groups.length}">
+              <compose view="${component.view}"
+                       view-model.bind="component.instance"></compose>
+            </td>
+            <td if.bind="component.layout === 'forEachColumn'" repeat.for="column of $parent.internals.mainColumns">
+              <compose view="${$parent.component.view}" view-model.bind="$parent.component.instances.get(column)"></compose>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      
+      <div class="m-grid-background-loading">
+      </div>
+      <div class="m-grid-background-components">
+        <compose repeat.for="component of components.componentsToBeDisplayed.background"
+                 view="${component.view}"
+                 view-model.bind="component.instance"></compose>
+      </div>
+  </div>
+</template>

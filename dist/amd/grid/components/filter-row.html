@@ -1,0 +1,11 @@
+<template>
+  <div if.bind="compareOperators.length !== 0">
+    <div class="m-row-filtering-wrapper ${selectedCompareOperator.textRequired ? 'm-row-filtering-with-text' : ''}">
+      <select class="m-form-control" value.bind="selectedCompareOperator">
+        <option></option>
+        <option repeat.for="operator of compareOperators" model.bind="operator">${operator.value}</option>
+      </select>
+      <input type="text" class="m-form-control" value.bind="compareText" blur.trigger="refresh()" keydown.delegate="_onCompareTextWrite($event)">
+    </div>
+  </div>
+</template>
