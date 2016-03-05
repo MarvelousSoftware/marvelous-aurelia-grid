@@ -8,7 +8,9 @@ which makes it easy to extend. It provides local and remote data sources.
 
 Project documentation: [http://marvelous.software/docs.html#/grid](http://marvelous.software/docs.html#/grid)
 
-Please bear in mind that this library is still in the beta and some features (like translations support) might be missing.
+.NET backend source code: https://github.com/MarvelousSoftware/MarvelousSoftwareDotNet
+
+NOTE: Please bear in mind that this library is still in the beta and some features (like translations support) might be missing.
 
 ## Installation
 Install the grid into your project using jspm:
@@ -38,7 +40,7 @@ Currently only modern browsers are supported, but IE >= 9 support is on the TODO
 
 ## License
 GNU General Public License is the only option for now, but commercial license will be available in the future.
-It will not be free, but price will be really reasonable.
+It will not be free, but price will be affordable even for small projects.
 
 ## Dependencies
 * aurelia-binding
