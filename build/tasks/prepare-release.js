@@ -18,18 +18,24 @@ gulp.task('changelog', function(callback) {
   return changelog({
     repository: pkg.repository.url,
     version: pkg.version,
-    file: paths.doc + '/CHANGELOG.md'
+    file: paths.doc + '/CHANGELOG.md',
+    preset: 'angular'
   }, function(err, log) {
     fs.writeFileSync(paths.doc + '/CHANGELOG.md', log);
   });
 });
 
+gulp.task('copy-build-to-dist', function() {
+  return gulp.src(paths.output + '**/*')
+    .pipe(gulp.dest(paths.release.output));
+});
+
 gulp.task('prepare-release', function(callback){
   return runSequence(
-    'lint',
     'bump-version',
-    'doc',
-    'changelog',
+    //'doc',
+    //'changelog',
+    'export',
     callback
   );
 });

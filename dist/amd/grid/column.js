@@ -110,6 +110,7 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
                                 _this.grid.internals.dragAndDropListeners.forEach(function (l) { return l.canceled(e, el, _this.column); });
                             },
                             started: function (e, el) {
+                                _this.grid.internals.createTempContainer();
                                 _this.grid.internals.dragAndDropListeners.forEach(function (l) { return l.started(e, el, _this.column); });
                             }
                         }

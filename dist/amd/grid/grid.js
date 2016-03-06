@@ -49,6 +49,7 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
                 function Grid(element, components, aureliaUtils, renderer, domSettingsReader, optionsReaderFactory, container) {
                     this.initialized = false;
                     this.subs = [];
+                    this._stateContainerName = '__m-grid__';
                     this._domOptionsElement = element.cloneNode(true);
                     this.components = components;
                     this.aureliaUtils = aureliaUtils;
@@ -110,12 +111,12 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
                  */
                 Grid.prototype.loadState = function (serializedState) {
                     var state = JSON.parse(serializedState);
-                    this.components.forEachInstanceWithMethod('loadState', function (instance) {
-                        var name = instance.constructor.name;
-                        instance.loadState(state[name] || {});
+                    this.components.forEachInstanceWithMethod('loadState', function (x) {
+                        var name = x.component.name;
+                        x.instance.loadState(state[name] || {});
                     });
                     // beside components main grid has state as well
-                    this._loadMainGridState(state[Grid.name] || {});
+                    this._loadMainGridState(state[this._stateContainerName] || {});
                     this.internals.refresh();
                 };
                 /**
@@ -124,13 +125,13 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
                  */
                 Grid.prototype.saveState = function () {
                     var state = {};
-                    this.components.forEachInstanceWithMethod('saveState', function (instance) {
-                        var name = instance.constructor.name; // TODO: won't work with IE9
+                    this.components.forEachInstanceWithMethod('saveState', function (x) {
+                        var name = x.component.name;
                         state[name] = state[name] || {};
-                        instance.saveState(state[name]);
+                        x.instance.saveState(state[name]);
                     });
                     // main grid has state as well
-                    var name = Grid.name;
+                    var name = this._stateContainerName;
                     state[name] = state[name] || {};
                     this._saveMainGridState(state[name]);
                     return JSON.stringify(state);

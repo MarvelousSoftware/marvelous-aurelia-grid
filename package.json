@@ -1,13 +1,13 @@
 {
   "name": "marvelous-aurelia-grid",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Damian Kaminski",
   "license": "GNU General Public License",
   "homepage": "http://marvelous.software/docs.html#/grid",
   "main": "dist/common/grid.js",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/MarvelousSoftware/marvelous-aurelia-grid"
   },
   "devDependencies": {
     "aurelia-tools": "^0.1.3",

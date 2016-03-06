@@ -94,19 +94,22 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                         layout: constants_1.componentLayout.full
                     }), false);
                     this.add(new ComponentRegistration({
+                        name: 'm-sorting',
                         type: all_1.SortingComponent,
                         position: constants_1.componentPosition.background
                     }), false);
                     this.add(new ComponentRegistration({
+                        name: 'm-column-chooser',
                         type: all_1.ColumnChooserComponent,
                         view: './components/column-chooser.html',
                         position: constants_1.componentPosition.background
                     }), false);
                     this.add(new ComponentRegistration({
+                        name: 'm-column-reordedring',
                         type: all_1.ColumnReorderingComponent,
                         position: constants_1.componentPosition.background
                     }), false);
-                    this.forEach(function (x) { return x.load(); });
+                    this.forEach(function (x) { return x._load(); });
                 };
                 ComponentsArray.prototype.add = function (component, autoLoad) {
                     var _this = this;
@@ -114,10 +117,16 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                     if (!(component instanceof ComponentRegistration)) {
                         throw new Error('Given component has to be an instance of Component type.');
                     }
-                    component.init(this.grid, this.container, function () { _this.refreshComponentsToBeDisplayed(); });
+                    this._checkNameUniqueness(component.name);
+                    component._init(this.grid, this.container, function () { _this.refreshComponentsToBeDisplayed(); });
                     this.push(component);
                     if (autoLoad) {
-                        component.load();
+                        component._load();
+                    }
+                };
+                ComponentsArray.prototype._checkNameUniqueness = function (name) {
+                    if (this.filter(function (x) { return x.name == name; }).length > 0) {
+                        throw new Error("Component named as '" + name + "' is already defined.");
                     }
                 };
                 ComponentsArray.prototype.get = function (type) {
@@ -131,11 +140,17 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                     var instances = [];
                     this.forEach(function (component) {
                         if (component.instance) {
-                            instances.push(component.instance);
+                            instances.push({
+                                component: component,
+                                instance: component.instance
+                            });
                         }
                         if (component.instances) {
                             component.instances.forEach(function (x) {
-                                instances.push(x);
+                                instances.push({
+                                    component: component,
+                                    instance: x
+                                });
                             });
                         }
                     });
@@ -145,9 +160,9 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                  * Invokes action for each instance with defined given method.
                  */
                 ComponentsArray.prototype.forEachInstanceWithMethod = function (method, action) {
-                    this.getAllInstances().forEach(function (instance) {
-                        if (instance && instance[method] instanceof Function) {
-                            action(instance);
+                    this.getAllInstances().forEach(function (x) {
+                        if (x.instance && x.instance[method] instanceof Function) {
+                            action(x);
                         }
                     });
                 };
@@ -181,6 +196,9 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                     this.enabled = false;
                     this._onEnabledChanged = utils_1.Utils.noop;
                     this._loaded = false;
+                    if (!component.name) {
+                        throw new Error("Component needs to declare its own name.");
+                    }
                     var missingField = false;
                     if (component.position == constants_1.componentPosition.background) {
                         if (utils_1.Utils.allDefined(component, 'type') === false) {
@@ -203,12 +221,12 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                         this.layout = this.layout || constants_1.componentLayout.full;
                     }
                 }
-                ComponentRegistration.prototype.init = function (grid, container, onEnabledChanged) {
+                ComponentRegistration.prototype._init = function (grid, container, onEnabledChanged) {
                     this._onEnabledChanged = onEnabledChanged || this._onEnabledChanged;
                     this._grid = grid;
                     this._container = container;
                 };
-                ComponentRegistration.prototype.load = function () {
+                ComponentRegistration.prototype._load = function () {
                     var _this = this;
                     if (this._loaded) {
                         return;
@@ -287,7 +305,7 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                     if (this._loaded) {
                         return;
                     }
-                    this.load();
+                    this._load();
                 };
                 /**
                  * Creates view models. Depending on the layout it may create a single view model

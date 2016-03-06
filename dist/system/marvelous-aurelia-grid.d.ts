@@ -68,26 +68,29 @@ declare module "marvelous-aurelia-grid/grid/pluginability" {
 	import { Container } from 'aurelia-dependency-injection';
 	import { Column } from 'marvelous-aurelia-grid/grid/all';
 	import { Grid } from 'marvelous-aurelia-grid/grid/grid';
-	export class ComponentsArray extends Array<ComponentRegistration> {
+	export class ComponentsArray extends Array<ComponentRegistration<any>> {
 	    container: any;
 	    grid: Grid;
 	    componentsToBeDisplayed: {};
 	    constructor(container: any);
 	    init(grid: Grid): void;
-	    add(component: ComponentRegistration, autoLoad?: boolean): void;
-	    get(type: Function): ComponentRegistration;
-	    getAllInstances(): Array<any>;
+	    add(component: ComponentRegistration<any>, autoLoad?: boolean): void;
+	    private _checkNameUniqueness(name);
+	    get<T extends GridComponent>(type: {
+	        new (...args): T;
+	    }): ComponentRegistration<T>;
+	    getAllInstances(): IComponentInstance<any>[];
 	    /**
 	     * Invokes action for each instance with defined given method.
 	     */
-	    forEachInstanceWithMethod(method: string, action: (instance: any) => void): void;
+	    forEachInstanceWithMethod(method: string, action: (instance: IComponentInstance<any>) => void): void;
 	    refreshComponentsToBeDisplayed(): void;
 	}
 	export interface IComponentRegistrationDefinition {
 	    /**
 	     * Name of the component.
 	     */
-	    name?: string;
+	    name: string;
 	    /**
 	     * Component's constructor function.
 	     */
@@ -113,12 +116,12 @@ declare module "marvelous-aurelia-grid/grid/pluginability" {
 	     */
 	    layout?: string;
 	}
-	export class ComponentRegistration {
+	export class ComponentRegistration<T extends GridComponent> {
 	    type: Function;
 	    position: any;
 	    view: any;
-	    instance: any;
-	    instances: Map<Column, any>;
+	    instance: T;
+	    instances: Map<Column, T>;
 	    layout: any;
 	    name: string;
 	    enabled: boolean;
@@ -127,8 +130,8 @@ declare module "marvelous-aurelia-grid/grid/pluginability" {
 	    private _container;
 	    private _loaded;
 	    constructor(component: IComponentRegistrationDefinition);
-	    init(grid: Grid, container: Container, onEnabledChanged: Function): void;
-	    load(): void;
+	    _init(grid: Grid, container: Container, onEnabledChanged: Function): void;
+	    _load(): void;
 	    /**
 	     * Enables the component.
 	     */
@@ -140,7 +143,7 @@ declare module "marvelous-aurelia-grid/grid/pluginability" {
 	    /**
 	     * Gets all instances associated with current component.
 	     */
-	    getAllInstances(): any[];
+	    getAllInstances(): GridComponent[];
 	    private _ensureLoaded();
 	    /**
 	     * Creates view models. Depending on the layout it may create a single view model
@@ -183,6 +186,10 @@ declare module "marvelous-aurelia-grid/grid/pluginability" {
 	     * Loads state.
 	     */
 	    loadState(state: any): void;
+	}
+	export interface IComponentInstance<T extends GridComponent> {
+	    component: ComponentRegistration<T>;
+	    instance: GridComponent;
 	}
 }
 declare module "marvelous-aurelia-grid/grid/gridRenderer" {
@@ -382,6 +389,7 @@ declare module "marvelous-aurelia-grid/grid/grid" {
 	    internals: GridInternals;
 	    subs: (() => void)[];
 	    private _domOptionsElement;
+	    private _stateContainerName;
 	    constructor(element: HTMLElement, components: ComponentsArray, aureliaUtils: AureliaUtils, renderer: GridRenderer, domSettingsReader: DOMSettingsReader, optionsReaderFactory: OptionsReaderFactory, container: Container);
 	    bind(executionContext: any): void;
 	    attached(): void;
