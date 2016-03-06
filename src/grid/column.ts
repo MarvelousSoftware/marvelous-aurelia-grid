@@ -108,6 +108,7 @@ export class ColumnViewModel {
           this.grid.internals.dragAndDropListeners.forEach(l => l.canceled(e, el, this.column));
         },
         started: (e, el) => {
+          this.grid.internals.createTempContainer();
           this.grid.internals.dragAndDropListeners.forEach(l => l.started(e, el, this.column));
         }
       }

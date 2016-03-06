@@ -40,6 +40,7 @@ export class Grid {
   subs: (()=>void)[] = [];
 
   private _domOptionsElement: HTMLElement;
+  private _stateContainerName = '__m-grid__';
 
   constructor(element: HTMLElement, components: ComponentsArray, aureliaUtils: AureliaUtils, renderer: GridRenderer, 
   domSettingsReader: DOMSettingsReader, optionsReaderFactory: OptionsReaderFactory, container: Container) {
@@ -117,13 +118,13 @@ export class Grid {
    */
   loadState(serializedState: string) {
     let state = JSON.parse(serializedState);
-    this.components.forEachInstanceWithMethod('loadState', instance => {
-      let name = instance.constructor.name;
-      instance.loadState(state[name] || {});
+    this.components.forEachInstanceWithMethod('loadState', x => {
+      let name = x.component.name;
+      x.instance.loadState(state[name] || {});
     });
     
     // beside components main grid has state as well
-    this._loadMainGridState(state[Grid.name] || {});
+    this._loadMainGridState(state[this._stateContainerName] || {});
     this.internals.refresh();
   }
   
@@ -134,14 +135,14 @@ export class Grid {
   saveState(): string {
     let state = {};
     
-    this.components.forEachInstanceWithMethod('saveState', instance => {
-      let name = instance.constructor.name; // TODO: won't work with IE9
+    this.components.forEachInstanceWithMethod('saveState', x => {
+      let name = x.component.name;
       state[name] = state[name] || {};
-      instance.saveState(state[name]);
+      x.instance.saveState(state[name]);
     });
     
     // main grid has state as well
-    let name = Grid.name;
+    let name = this._stateContainerName;
     state[name] = state[name] || {};
     this._saveMainGridState(state[name]);
     return JSON.stringify(state);

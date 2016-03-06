@@ -9,7 +9,7 @@ import {Grid} from './grid';
 
 @transient()
 @inject(Container)
-export class ComponentsArray extends Array<ComponentRegistration> {
+export class ComponentsArray extends Array<ComponentRegistration<any>> {
   container;
   grid: Grid;
   componentsToBeDisplayed = {};
@@ -79,36 +79,47 @@ export class ComponentsArray extends Array<ComponentRegistration> {
     }), false);
 
     this.add(new ComponentRegistration({
+      name: 'm-sorting',
       type: SortingComponent,
       position: componentPosition.background
     }), false);
     this.add(new ComponentRegistration({
+      name: 'm-column-chooser',
       type: ColumnChooserComponent,
       view: './components/column-chooser.html',
       position: componentPosition.background
     }), false);
     this.add(new ComponentRegistration({
+      name: 'm-column-reordedring',
       type: ColumnReorderingComponent,
       position: componentPosition.background
     }), false);
 
-    this.forEach(x => x.load());
+    this.forEach(x => x._load());
   }
 
-  add(component: ComponentRegistration, autoLoad: boolean = true) {
+  add(component: ComponentRegistration<any>, autoLoad: boolean = true) {
     if (!(component instanceof ComponentRegistration)) {
       throw new Error('Given component has to be an instance of Component type.');
     }
 
-    component.init(this.grid, this.container, () => { this.refreshComponentsToBeDisplayed() });
+    this._checkNameUniqueness(component.name);
+
+    component._init(this.grid, this.container, () => { this.refreshComponentsToBeDisplayed() });
     this.push(component);
 
     if (autoLoad) {
-      component.load();
+      component._load();
     }
   }
-
-  get(type: Function): ComponentRegistration {
+  
+  private _checkNameUniqueness(name: string) {
+    if (this.filter(x => x.name == name).length > 0) {
+      throw new Error(`Component named as '${name}' is already defined.`);
+    }
+  }
+  
+  get<T extends GridComponent>(type: {new(...args): T}): ComponentRegistration<T> {
     let components = this.filter(x => x.type === type);
     if (!components.length) {
       return undefined;
@@ -116,16 +127,22 @@ export class ComponentsArray extends Array<ComponentRegistration> {
     return components[0];
   }
 
-  getAllInstances(): Array<any> {
-    let instances = [];
+  getAllInstances(): IComponentInstance<any>[] {
+    let instances: IComponentInstance<any>[] = [];
 
     this.forEach(component => {
       if (component.instance) {
-        instances.push(component.instance);
+        instances.push({
+          component: component,
+          instance: component.instance
+        });
       }
       if (component.instances) {
         component.instances.forEach(x => {
-          instances.push(x);
+          instances.push({
+            component: component,
+            instance: x
+          });
         });
       }
     });
@@ -136,10 +153,10 @@ export class ComponentsArray extends Array<ComponentRegistration> {
   /**
    * Invokes action for each instance with defined given method.
    */
-  forEachInstanceWithMethod(method: string, action: (instance: any) => void) {
-    this.getAllInstances().forEach(instance => {
-      if (instance && instance[method] instanceof Function) {
-        action(instance);
+  forEachInstanceWithMethod(method: string, action: (instance: IComponentInstance<any>) => void) {
+    this.getAllInstances().forEach(x => {
+      if (x.instance && x.instance[method] instanceof Function) {
+        action(x);
       }
     });
   }
@@ -160,7 +177,7 @@ export interface IComponentRegistrationDefinition {
   /**
    * Name of the component.
    */
-  name?: string;
+  name: string;
   
   /**
    * Component's constructor function.
@@ -191,12 +208,12 @@ export interface IComponentRegistrationDefinition {
   layout?: string
 }
 
-export class ComponentRegistration {
+export class ComponentRegistration<T extends GridComponent> {
   type: Function = undefined;
   position = undefined;
   view = undefined;
-  instance: any = undefined;
-  instances: Map<Column, any> = undefined;
+  instance: T = undefined;
+  instances: Map<Column, T> = undefined;
   layout = undefined;
   //order;
 
@@ -210,6 +227,10 @@ export class ComponentRegistration {
   private _loaded = false;
 
   constructor(component: IComponentRegistrationDefinition) {
+    if (!component.name) {
+      throw new Error(`Component needs to declare its own name.`);
+    }
+
     let missingField = false;
     if (component.position == componentPosition.background) {
       if (Utils.allDefined(component, 'type') === false) {
@@ -229,20 +250,20 @@ export class ComponentRegistration {
         this[variable] = component[variable];
       }
     }
-    
+
     if (component.position != componentPosition.background) {
       // default component layout is `full`, but only if component is not the background one
       this.layout = this.layout || componentLayout.full;
     }
   }
 
-  init(grid: Grid, container: Container, onEnabledChanged: Function) {
+  _init(grid: Grid, container: Container, onEnabledChanged: Function) {
     this._onEnabledChanged = onEnabledChanged || this._onEnabledChanged;
     this._grid = grid;
     this._container = container;
   }
 
-  load() {
+  _load() {
     if (this._loaded) {
       return;
     }
@@ -312,7 +333,7 @@ export class ComponentRegistration {
   /**
    * Gets all instances associated with current component.
    */
-  getAllInstances(): any[] {
+  getAllInstances(): GridComponent[] {
     let instances = [];
 
     if (this.instance) {
@@ -328,7 +349,7 @@ export class ComponentRegistration {
     if (this._loaded) {
       return;
     }
-    this.load();
+    this._load();
   }
   
   /**
@@ -339,7 +360,7 @@ export class ComponentRegistration {
     switch (this.layout) {
       case componentLayout.forEachColumn:
         // Creates instance for each column using column object reference as a key.
-        this.instances = new Map<Column, any>();
+        this.instances = new Map<Column, T>();
         this._grid.options.columns.forEach(x => this.instances.set(x, this._resolveInstance(x)));
         break;
       default:
@@ -417,4 +438,9 @@ export class GridComponent {
    */
   loadState(state: any): void {
   }
+}
+
+export interface IComponentInstance<T extends GridComponent> {
+  component: ComponentRegistration<T>,
+  instance: GridComponent;
 }
