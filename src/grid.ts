@@ -1,5 +1,12 @@
-export function configure(aurelia){
+import {gridConfig} from './grid/config';
+
+export function configure(aurelia, configFunc){
   aurelia.globalResources('./grid/grid');
+  aurelia.globalResources('./grid/converters/translate');
+  
+  if(typeof configFunc === "function") {
+    configFunc(gridConfig);    
+  }
 }
 
 // export * from './grid/components/pagination';
@@ -19,6 +26,7 @@ export function configure(aurelia){
 //export * from './grid/models/column';
 
 export {IReadContext} from './grid/dataSource/dataSource';
+export {IGridConfig} from './grid/config';
 export * from './grid/constants';
 export * from './grid/column';
 export * from './grid/grid';

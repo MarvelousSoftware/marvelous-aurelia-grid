@@ -19,67 +19,67 @@ export class FilterRowComponent extends GridComponent {
   allCompareOperators: {[key:string]: ICompareOperator} = {
     'Equal': {
       name: 'Equal',
-      value: 'equals',
+      value: 'filter-row/equal',
       textRequired: true
     },
     'NotEqual': {
       name: 'NotEqual',
-      value: 'not equals',
+      value: 'filter-row/not-equal',
       textRequired: true
     },
     'Empty': {
       name: 'Empty',
-      value: 'is empty',
+      value: 'filter-row/empty',
       textRequired: false
     },
     'NotEmpty': {
       name: 'NotEmpty',
-      value: 'is not empty',
+      value: 'filter-row/not-empty',
       textRequired: false
     },
     'StartsWith': {
       name: 'StartsWith',
-      value: 'starts with',
+      value: 'filter-row/starts-with',
       textRequired: true
     },
     'EndsWith': {
       name: 'EndsWith',
-      value: 'ends with',
+      value: 'filter-row/ends-with',
       textRequired: true
     },
     'Contains': {
       name: 'Contains',
-      value: 'contains',
+      value: 'filter-row/contains',
       textRequired: true
     },
     'GreaterThan': {
       name: 'GreaterThan',
-      value: 'greater than',
+      value: 'filter-row/greater-than',
       textRequired: true
     },
     'GreaterThanOrEqual': {
       name: 'GreaterThanOrEqual',
-      value: 'greater than or equal',
+      value: 'filter-row/greater-than-or-equal',
       textRequired: true
     },
     'LessThan': {
       name: 'LessThan',
-      value: 'less than',
+      value: 'filter-row/less-than',
       textRequired: true
     },
     'LessThanOrEqual': {
       name: 'LessThanOrEqual',
-      value: 'less than or equal',
+      value: 'filter-row/less-than-or-equal',
       textRequired: true
     },
     'IsTrue': {
       name: 'IsTrue',
-      value: 'is true',
+      value: 'filter-row/is-true',
       textRequired: false
     },
     'IsFalse': {
       name: 'IsFalse',
-      value: 'is false',
+      value: 'filter-row/is-false',
       textRequired: false
     }
   };

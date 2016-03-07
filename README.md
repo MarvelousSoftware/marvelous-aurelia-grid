@@ -46,6 +46,7 @@ It will not be free, but price will be affordable even for small projects.
 * aurelia-binding
 * aurelia-dependency-injection
 * aurelia-templating
+* aurelia-templating-resources
 * marvelous-aurelia-core
 * marvelous-aurelia-query-language
 

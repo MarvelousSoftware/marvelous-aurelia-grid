@@ -8,13 +8,15 @@
         <button click.delegate="togglePopUp()" type="button" class="m-grid-popup-close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="m-grid-popup-title">Column Chooser</h4>
+        <h4 class="m-grid-popup-title">
+          ${'column-chooser/title' | mGridTranslate & signal:'m-grid-refresh-translations'}
+        </h4>
       </div>
       <div class="m-grid-popup-body">
         <m-grid-column repeat.for="column of columns" column.bind="column" grid.bind="$parent._gridInternals._grid">
         </m-grid-column>
         <div if.bind="!columns.length">
-          Empty
+          ${'column-chooser/empty' | mGridTranslate & signal:'m-grid-refresh-translations'}
         </div>
       </div>
     </div>
