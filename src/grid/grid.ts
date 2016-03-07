@@ -1,9 +1,11 @@
 import {computedFrom} from 'aurelia-binding';
 import {customElement, bindable, processContent, noView} from 'aurelia-templating';
 import {inject, Container} from 'aurelia-dependency-injection';
+import {BindingSignaler} from 'aurelia-templating-resources';
 import {DomUtils} from 'marvelous-aurelia-core/utils';
 import {OptionsReaderFactory, OptionsReader} from 'marvelous-aurelia-core/optionsReader';
 import {AureliaUtils} from 'marvelous-aurelia-core/aureliaUtils';
+import {gridConfig} from './config';
 import {ComponentRegistration} from './pluginability';
 import {GridRenderer} from './gridRenderer';
 import {Column} from './models/column';
@@ -62,7 +64,23 @@ export class Grid {
     // these options are already copied anyway
     DomUtils.clearInnerHtml(element);
   }
-
+  
+  /**
+   * Refreshes grid translations.
+   */
+  static refreshTranslations() {
+    let signaler = Container.instance.get(BindingSignaler);
+    signaler.signal('m-grid-refresh-translations');
+  }
+  
+  /**
+   * Changes the current language and refreshes translations instantly.
+   */
+  static changeLanguage(language) {
+    gridConfig.language = language;
+    Grid.refreshTranslations();
+  }
+  
   bind(executionContext) {
     this.viewModel = executionContext;
     this.domSettingsReader.init(this.viewModel, this._domOptionsElement);

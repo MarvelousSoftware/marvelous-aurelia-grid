@@ -60,7 +60,7 @@ export class ColumnChooserComponent extends GridComponent {
     
     let toolbox = this._components.get(ToolboxComponent).instance;
     toolbox.addButton({
-      text: 'Column Chooser',
+      text: 'column-chooser/open-button-text',
       click: () => this.togglePopUp()
     });
   }
