@@ -15,6 +15,7 @@ import {ComponentsArray} from './pluginability';
 import {DOMSettingsReader} from '../domSettingsReader';
 import {GridInternals} from './gridInternals';
 import {GridOptions} from './gridOptions';
+import {SelectionComponent} from './components';
 
 @customElement('m-grid')
 @processContent(false)
@@ -40,7 +41,9 @@ export class Grid {
   internals: GridInternals;
   
   subs: (()=>void)[] = [];
-
+  
+  selection: SelectionComponent;
+  
   private _domOptionsElement: HTMLElement;
   private _stateContainerName = '__m-grid__';
 
@@ -92,6 +95,8 @@ export class Grid {
 
     this.internals.mainColumns = this.options.columns.filter(x => !x.hidden);
     this.components.init(this);
+    
+    this.selection = this.components.get(SelectionComponent).instance;
 
     this.subs.push(this.aureliaUtils.observe(this.internals, 'mainColumns', () => this.renderer.render()));
   }

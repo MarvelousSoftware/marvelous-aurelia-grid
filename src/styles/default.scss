@@ -4,4 +4,6 @@
 @import "../../jspm_packages/github/marveloussoftware/marvelous-aurelia-core@0.1.0/styles/base"; // TODO: this one should probably be imported with js import
 
 // Components
+@import "variables";
 @import "grid";
+@import "../grid/components/selection/selection";

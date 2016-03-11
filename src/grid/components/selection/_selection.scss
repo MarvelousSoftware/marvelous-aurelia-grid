@@ -1,0 +1,11 @@
+.m-grid {  
+  table tbody tr.m-grid-data-row.m-row-selected {
+    background-color: $grid-selection-bg;
+    color: $grid-selection-color;
+    
+    td {
+      border-color: $grid-selection-border-color;
+      border-bottom-color: $grid-selection-border-color;
+    }
+  }
+}

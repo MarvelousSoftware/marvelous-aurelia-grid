@@ -32,6 +32,10 @@ export class GridInternals {
     return this._id;
   }
   
+  get renderer() {
+    return this._grid.renderer;
+  }
+  
   makeColumnsDraggable() {
     this.columnsDraggabilityEnabled = true;
   }
@@ -99,7 +103,7 @@ export class GridInternals {
     
     let dependencies = this.getInstancesOfGridServices();
     explicitDependencies.forEach(x => dependencies.push(x))   
-        
+    
     return this._instantiate(fn, dependencies);
   }
   
@@ -115,6 +119,10 @@ export class GridInternals {
     while (i--) {
       let dep = dependencies[i];
       let found = false;
+
+      if(!dep) {
+        throw new Error(`One of the dependencies of '${fn}' is undefined. Make sure there's no circular dependencies.`);
+      }
 
       for (let instance of explicitDependencies) {
         if (instance instanceof dep) {
@@ -139,6 +147,6 @@ export class GridInternals {
    */
   getInstancesOfGridServices(): any[] {
     let g = this._grid;
-    return [g.components, g.dataSource, g.aureliaUtils, g.options, g.internals, g.optionsReader, g];
+    return [g.components, g.dataSource, g.aureliaUtils, g.options, g.internals, g.optionsReader, g.renderer, g];
   }
 }

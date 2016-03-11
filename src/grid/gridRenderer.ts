@@ -1,12 +1,14 @@
 import {inject, transient} from 'aurelia-dependency-injection';
-import {GroupingComponent, IDataRow, Grid, Column} from './all';
+import {Column} from './models/column';
+import {Grid} from './grid';
+import {GroupingComponent} from './components/grouping';
 import {Compiler} from 'marvelous-aurelia-core/compiler';
 import {DomUtils} from 'marvelous-aurelia-core/utils';
 
 @transient()
 @inject(Compiler)
 export class GridRenderer {
-  rows: IDataRow[];
+  rows: DataRow[];
   groups: any[];
   tableDataViewFactory;
   
@@ -47,8 +49,9 @@ export class GridRenderer {
 
     var rowTemplate = document.createElement("tr");
 		rowTemplate.setAttribute("repeat.for", "$row of renderer.rows");
-    rowTemplate.setAttribute("class", "${$row.type === 'group' ? 'm-grid-group-row' : 'm-grid-data-row'}");
-
+    rowTemplate.setAttribute("class", "${$row.classes}");
+    rowTemplate.setAttribute("click.trigger", "$row.grid.internals.publish('RowClick', {row: $row, nativeEvent: $event})")    
+    
     if(this.groups.length) {
       var td = document.createElement("td");
       td.setAttribute("if.bind", "$row.type === 'data'");
@@ -96,8 +99,8 @@ export class GridRenderer {
     }
 
     let lvl = 0;
-    let rows: IDataRow[] = [];
-    let prevRow: IDataRow;
+    let rows: DataRow[] = [];
+    let prevRow: DataRow;
 
     if(!this.grid.dataSource.result) {
       return rows;
@@ -113,14 +116,16 @@ export class GridRenderer {
         }
 
         lvl = i;
-
-        rows.push({
+        
+        let row = new DataRow({
           grid: this.grid,
-          type: 'group',
+          type: rowTypes.group,
           column: groupedColumn,
           value: x[groupedColumn.field],
           level: lvl
         });
+        row.addClass('m-grid-group-row');
+        rows.push(row);
       }
 
       if(prevRow && prevRow.type === 'group') {
@@ -128,18 +133,24 @@ export class GridRenderer {
         lvl++;
       }
 
-      let row = {
+      let row = new DataRow({
         grid: this.grid,
-        type: 'data',
+        type: rowTypes.data,
         data: x,
         level: lvl
-      };
+      });
+      row.addClass('m-grid-data-row')
       rows.push(row);
       prevRow = row;
     });
 
     return rows;
   }
+}
+
+export let rowTypes = {
+  group: 'group',
+  data: 'data'
 }
 
 export interface IDataRow {
@@ -149,4 +160,50 @@ export interface IDataRow {
   value?: any,
   level: Number,
   data?: any
+}
+
+export class DataRow implements IDataRow {
+  grid: Grid = undefined;
+  type: string  = undefined;
+  column: Column = undefined;
+  value: any = undefined;
+  level: Number = undefined;
+  data: any = undefined;
+  
+  classes: string = '';
+  
+  constructor(row: IDataRow) {
+    for(let key in row) {
+      this[key] = row[key];
+    }
+  }
+  
+  addClass(name) {
+    if(this.hasClass(name)) {
+      return;
+    }
+
+    this.classes += ' ' + name;
+  }
+
+  removeClass(name) {
+    if(!this.hasClass(name)) {
+      return;
+    }
+
+    this.classes = this.classes.replace(' ' + name, '');
+    this.classes = this.classes.replace(name, '');
+  }
+
+  hasClass(name) {
+    if(this.classes !== undefined && this.classes.indexOf(name) !== -1) {
+      return true;
+    }
+    return false;
+  }
+}
+
+export interface IRowClickEvent {
+  nativeEvent: MouseEvent;
+  row: DataRow;
 }

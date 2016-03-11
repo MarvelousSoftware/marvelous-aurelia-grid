@@ -21,6 +21,7 @@ export let gridConfig: IGridConfig = {
   fallbackLanguage: 'en-US',
   translations: {
     'en-US': {
+      'grid/no-records': 'No records found.',
       'column-chooser/title': 'Column Chooser',
       'column-chooser/empty': 'Empty',
       'column-chooser/open-button-text': 'Column Chooser',
@@ -40,6 +41,7 @@ export let gridConfig: IGridConfig = {
       'filter-row/is-false': 'is false'
     },
     'pl-PL': {
+      'grid/no-records': 'Brak danych.',
       'column-chooser/title': 'Dodatkowe kolumny',
       'column-chooser/empty': 'Pusto',
       'column-chooser/open-button-text': 'Dodatkowe kolumny',
