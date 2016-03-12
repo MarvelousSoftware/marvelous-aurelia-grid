@@ -17,15 +17,16 @@ System.config({
     "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-beta.1.1.5",
     "aurelia-framework": "npm:aurelia-framework@1.0.0-beta.1.1.3",
     "aurelia-metadata": "npm:aurelia-metadata@1.0.0-beta.1.1.6",
-    "aurelia-pal-browser": "npm:aurelia-pal-browser@1.0.0-beta.1.1.3",
+    "aurelia-pal-browser": "npm:aurelia-pal-browser@1.0.0-beta.1.1.4",
+    "aurelia-polyfills": "npm:aurelia-polyfills@1.0.0-beta.1.0.6",
     "aurelia-templating": "npm:aurelia-templating@1.0.0-beta.1.1.4",
     "aurelia-templating-resources": "npm:aurelia-templating-resources@1.0.0-beta.1.1.3",
     "babel": "npm:babel-core@5.8.35",
     "babel-runtime": "npm:babel-runtime@5.8.35",
-    "core-js": "npm:core-js@2.1.0",
+    "core-js": "npm:core-js@2.1.5",
     "es6-module-loader": "npm:es6-module-loader@0.17.11",
     "marvelous-aurelia-core": "github:marveloussoftware/marvelous-aurelia-core@0.1.0",
-    "marvelous-aurelia-query-language": "github:marveloussoftware/marvelous-aurelia-query-language@0.1.0",
+    "marvelous-aurelia-query-language": "github:marveloussoftware/marvelous-aurelia-query-language@0.1.2",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
@@ -43,7 +44,7 @@ System.config({
       "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-beta.1.1.5",
       "aurelia-templating": "npm:aurelia-templating@1.0.0-beta.1.1.4"
     },
-    "github:marveloussoftware/marvelous-aurelia-query-language@0.1.0": {
+    "github:marveloussoftware/marvelous-aurelia-query-language@0.1.2": {
       "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-beta.1.1.5",
       "aurelia-templating": "npm:aurelia-templating@1.0.0-beta.1.1.4",
       "marvelous-aurelia-core": "github:marveloussoftware/marvelous-aurelia-core@0.1.0"
@@ -71,7 +72,7 @@ System.config({
       "aurelia-path": "npm:aurelia-path@1.0.0-beta.1.1.1",
       "aurelia-task-queue": "npm:aurelia-task-queue@1.0.0-beta.1.1.1",
       "aurelia-templating": "npm:aurelia-templating@1.0.0-beta.1.1.4",
-      "core-js": "npm:core-js@2.1.0"
+      "core-js": "npm:core-js@2.1.5"
     },
     "npm:aurelia-loader@1.0.0-beta.1.1.1": {
       "aurelia-metadata": "npm:aurelia-metadata@1.0.0-beta.1.1.6",
@@ -80,9 +81,11 @@ System.config({
     "npm:aurelia-metadata@1.0.0-beta.1.1.6": {
       "aurelia-pal": "npm:aurelia-pal@1.0.0-beta.1.1.1"
     },
-    "npm:aurelia-pal-browser@1.0.0-beta.1.1.3": {
-      "aurelia-pal": "npm:aurelia-pal@1.0.0-beta.1.1.1",
-      "core-js": "npm:core-js@2.1.0"
+    "npm:aurelia-pal-browser@1.0.0-beta.1.1.4": {
+      "aurelia-pal": "npm:aurelia-pal@1.0.0-beta.1.1.1"
+    },
+    "npm:aurelia-polyfills@1.0.0-beta.1.0.6": {
+      "aurelia-pal": "npm:aurelia-pal@1.0.0-beta.1.1.1"
     },
     "npm:aurelia-task-queue@1.0.0-beta.1.1.1": {
       "aurelia-pal": "npm:aurelia-pal@1.0.0-beta.1.1.1"
@@ -110,7 +113,7 @@ System.config({
     "npm:babel-runtime@5.8.35": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:core-js@2.1.0": {
+    "npm:core-js@2.1.5": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
