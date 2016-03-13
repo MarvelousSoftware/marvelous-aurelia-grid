@@ -3,6 +3,7 @@ import {PubSub} from 'marvelous-aurelia-core/pubsub';
 import {Grid} from './grid';
 import {Column} from './models/column';
 import {IColumnDragAndDropListener} from './column';
+import {GridRenderer} from './gridRenderer';
 
 export class GridInternals {
   columnsDraggabilityEnabled: boolean = false;
@@ -32,7 +33,7 @@ export class GridInternals {
     return this._id;
   }
   
-  get renderer() {
+  get renderer(): GridRenderer {
     return this._grid.renderer;
   }
   
