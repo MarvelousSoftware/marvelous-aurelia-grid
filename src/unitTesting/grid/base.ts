@@ -35,7 +35,7 @@ export class GridTestHelpers {
 		let settings = document.createElement('settings');
     settings.innerHTML = domBased;    
     this.reader.init({}, settings);
-    return new GridOptions(null, this.readerFactory.create({}, settings), this.reader, codeBased);
+    return new GridOptions(null, this.readerFactory.create({}, settings, codeBased), this.reader, codeBased);
 	}
 	
 	getColumn(attributes: any) {
@@ -68,7 +68,11 @@ export class GridTestHelpers {
 			mainColumns: [],
 			refresh: sinon.spy()
 		};
-		
+	  
+    internals.renderer = {
+      rows: []
+    };
+    	
 		internals.subscribe = (event: string, callback: Function) => {
 			internals.subscribe.subscribers.push({
 				event: event,
@@ -176,6 +180,7 @@ export class GridTestHelpers {
 export interface IGridInternalsMock {
 	element: HTMLElement;
 	mainColumns: Column[];
+  renderer: { rows: any[] };
 	
 	makeColumnsDraggable: Sinon.SinonSpy;
 	refresh: Sinon.SinonSpy;

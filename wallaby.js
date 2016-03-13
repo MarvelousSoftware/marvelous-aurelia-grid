@@ -1,14 +1,15 @@
-module.exports = function (wallaby) {
+module.exports = function(wallaby) {
 
   return {
     files: [
-
       { pattern: 'jspm_packages/system.js', instrument: false },
       { pattern: 'config.js', instrument: false },
       { pattern: 'node_modules/sinon/pkg/sinon.js', instrument: false },
 
       { pattern: 'src/**/*.ts', load: false },
-      { pattern: 'src/**/*.spec.ts', ignore: true }
+      { pattern: 'src/**/*.spec.ts', ignore: true },
+
+      { pattern: 'src/unitTesting/setup.ts', load: false }
     ],
 
     tests: [
@@ -19,7 +20,7 @@ module.exports = function (wallaby) {
       app.use('/jspm_packages', express.static(require('path').join(__dirname, 'jspm_packages')));
     },
 
-    bootstrap: function (wallaby) {
+    bootstrap: function(wallaby) {
       wallaby.delayStart();
 
       System.config({
@@ -37,9 +38,13 @@ module.exports = function (wallaby) {
         promises.push(System['import'](module));
       }
 
-      Promise.all(promises).then(function () {
-        wallaby.start();
-      }).catch(function (e) { setTimeout(function () { throw e; }, 0); });
+      System.import('src/unitTesting/setup')
+        .then(function() {
+          return Promise.all(promises);
+        })
+        .then(function() {
+          wallaby.start();
+        }).catch(function(e) { setTimeout(function() { throw e; }, 0); });
     },
 
     debug: false

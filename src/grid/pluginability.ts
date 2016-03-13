@@ -2,7 +2,7 @@ import {inject, transient, Container} from 'aurelia-dependency-injection';
 import {Utils} from 'marvelous-aurelia-core/utils';
 import {componentLayout, componentPosition} from './constants';
 import {PaginationComponent, FilterRowComponent, SortingComponent, GroupingComponent, QueryLanguageComponent, ColumnChooserComponent,
-ToolboxComponent, ColumnReorderingComponent, Column} from './all';
+ToolboxComponent, ColumnReorderingComponent, SelectionComponent, Column} from './all';
 import {Grid} from './grid';
 
 // TODO: allow to create a global ComponentRegistration in the plugin configuration
@@ -94,6 +94,11 @@ export class ComponentsArray extends Array<ComponentRegistration<any>> {
       type: ColumnReorderingComponent,
       position: componentPosition.background
     }), false);
+    this.add(new ComponentRegistration({
+      name: 'm-selection',
+      type: SelectionComponent,
+      position: componentPosition.background
+    }));
 
     this.forEach(x => x._load());
   }

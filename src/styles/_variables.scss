@@ -1,0 +1,25 @@
+$grid-primary-bg: $primary-color;
+$grid-primary-color: #fff;
+$grid-border-color: #ddd;
+$grid-bg-gray: #fafafa;
+
+$grid-column-ghost-bg: $grid-bg-gray;
+$grid-column-ghost-color: #555;
+$grid-column-ghost-shadow: darken($grid-bg-gray, 30%) 2px 2px 25px;
+
+$grid-dnd-marker-color: $grid-primary-bg;
+
+$grid-headings-bg: $grid-bg-gray;
+
+$grid-sorting-icon-color: $grid-primary-bg;
+
+$grid-grouping-margin-bg: $grid-bg-gray;
+$grid-grouping-margin-color: #525252;
+$grid-grouping-panel-bg: $grid-primary-bg;
+$grid-grouping-panel-color: $grid-primary-color;
+$grid-grouping-panel-bg-darker: darken($grid-primary-bg, 10%);
+$grid-grouping-panel-border-color: darken($grid-primary-bg, 5%);
+
+$grid-selection-bg: $grid-primary-bg;
+$grid-selection-color: $grid-primary-color;
+$grid-selection-border-color: darken($grid-selection-bg, 5%);

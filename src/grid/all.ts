@@ -1,11 +1,4 @@
-export * from './components/pagination';
-export * from './components/filter-row';
-export * from './components/sorting';
-export * from './components/grouping';
-export * from './components/query-language';
-export * from './components/column-chooser';
-export * from './components/toolbox';
-export * from './components/column-reordering';
+export * from './components';
 
 export * from './dataSource/dataSource';
 export * from './dataSource/dataSourceManager';

@@ -3,6 +3,7 @@ import {PubSub} from 'marvelous-aurelia-core/pubsub';
 import {Grid} from './grid';
 import {Column} from './models/column';
 import {IColumnDragAndDropListener} from './column';
+import {GridRenderer} from './gridRenderer';
 
 export class GridInternals {
   columnsDraggabilityEnabled: boolean = false;
@@ -30,6 +31,10 @@ export class GridInternals {
   
   get id() {
     return this._id;
+  }
+  
+  get renderer(): GridRenderer {
+    return this._grid.renderer;
   }
   
   makeColumnsDraggable() {
@@ -99,7 +104,7 @@ export class GridInternals {
     
     let dependencies = this.getInstancesOfGridServices();
     explicitDependencies.forEach(x => dependencies.push(x))   
-        
+    
     return this._instantiate(fn, dependencies);
   }
   
@@ -115,6 +120,10 @@ export class GridInternals {
     while (i--) {
       let dep = dependencies[i];
       let found = false;
+
+      if(!dep) {
+        throw new Error(`One of the dependencies of '${fn}' is undefined. Make sure there's no circular dependencies.`);
+      }
 
       for (let instance of explicitDependencies) {
         if (instance instanceof dep) {
@@ -139,6 +148,6 @@ export class GridInternals {
    */
   getInstancesOfGridServices(): any[] {
     let g = this._grid;
-    return [g.components, g.dataSource, g.aureliaUtils, g.options, g.internals, g.optionsReader, g];
+    return [g.components, g.dataSource, g.aureliaUtils, g.options, g.internals, g.optionsReader, g.renderer, g];
   }
 }
