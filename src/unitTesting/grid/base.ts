@@ -1,13 +1,13 @@
 import {Container} from 'aurelia-dependency-injection';
-import {GridOptions} from '../../grid/gridOptions';
-import {GridInternals} from '../../grid/gridInternals';
+import {GridOptions} from '../../grid/grid-options';
+import {GridInternals} from '../../grid/grid-internals';
 import {Column} from '../../grid/models/column';
 import {IColumnDragAndDropListener} from '../../grid/column';
-//import '../mutationObserverShim';
 import {initialize} from 'aurelia-pal-browser';
 import {DOMSettingsReader} from '../../domSettingsReader';
 import {AureliaUtils} from 'marvelous-aurelia-core/aureliaUtils';
 import {OptionsReaderFactory} from 'marvelous-aurelia-core/optionsReader';
+//import '../mutationObserverShim';
 
 export class GridTestHelpers {
 	container: Container;

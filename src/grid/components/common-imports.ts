@@ -1,4 +1,4 @@
-export {DataSource} from '../dataSource/dataSource';
-export {GridOptions} from '../gridOptions';
-export {GridInternals} from '../gridInternals';
+export {DataSource} from '../data-source/data-source';
+export {GridOptions} from '../grid-options';
+export {GridInternals} from '../grid-internals';
 export {GridComponent} from '../pluginability';

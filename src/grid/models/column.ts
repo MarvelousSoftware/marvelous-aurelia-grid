@@ -1,5 +1,5 @@
 import {Grid} from '../grid';
-import {GridInternals} from '../gridInternals';
+import {GridInternals} from '../grid-internals';
 
 export class Column {
   id: any = null;

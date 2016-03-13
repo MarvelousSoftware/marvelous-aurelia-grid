@@ -2,7 +2,7 @@ import {GridTestHelpers} from '../../unitTesting/grid/base';
 import {ColumnReorderingComponent} from './column-reordering';
 import {Column} from '../models/column';
 import {DomUtils} from 'marvelous-aurelia-core/utils';
-import {GridOptions} from '../gridOptions';
+import {GridOptions} from '../grid-options';
 
 describe('Column reordering component', () => {
   let h: GridTestHelpers;

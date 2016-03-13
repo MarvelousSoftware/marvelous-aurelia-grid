@@ -1,5 +1,5 @@
 import {Column} from './models/column';
-import {GridInternals} from './gridInternals';
+import {GridInternals} from './grid-internals';
 import {DOMSettingsReader} from '../domSettingsReader';
 import {OptionsReader} from 'marvelous-aurelia-core/optionsReader';
 

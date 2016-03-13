@@ -7,14 +7,14 @@ import {OptionsReaderFactory, OptionsReader} from 'marvelous-aurelia-core/option
 import {AureliaUtils} from 'marvelous-aurelia-core/aureliaUtils';
 import {gridConfig} from './config';
 import {ComponentRegistration} from './pluginability';
-import {GridRenderer} from './gridRenderer';
+import {GridRenderer} from './grid-renderer';
 import {Column} from './models/column';
-import {DataSourceManager} from './dataSource/dataSourceManager';
-import {DataSource} from './dataSource/dataSource';
+import {DataSourceManager} from './data-source/data-source-manager';
+import {DataSource} from './data-source/data-source';
 import {ComponentsArray} from './pluginability'; 
 import {DOMSettingsReader} from '../domSettingsReader';
-import {GridInternals} from './gridInternals';
-import {GridOptions} from './gridOptions';
+import {GridInternals} from './grid-internals';
+import {GridOptions} from './grid-options';
 import {SelectionComponent} from './components';
 
 @customElement('m-grid')

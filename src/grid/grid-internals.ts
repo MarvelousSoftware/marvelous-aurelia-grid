@@ -3,7 +3,7 @@ import {PubSub} from 'marvelous-aurelia-core/pubsub';
 import {Grid} from './grid';
 import {Column} from './models/column';
 import {IColumnDragAndDropListener} from './column';
-import {GridRenderer} from './gridRenderer';
+import {GridRenderer} from './grid-renderer';
 
 export class GridInternals {
   columnsDraggabilityEnabled: boolean = false;

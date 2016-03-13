@@ -1,6 +1,6 @@
 import {GridTestHelpers} from '../../../unitTesting/grid/base';
 import {SelectionComponent} from './selection';
-import {IRowClickEvent, DataRow, rowTypes} from '../../gridRenderer';
+import {IRowClickEvent, DataRow, rowTypes} from '../../grid-renderer';
 
 describe('FilterRow component', () => {
   let h: GridTestHelpers;

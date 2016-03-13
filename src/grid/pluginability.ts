@@ -45,35 +45,35 @@ export class ComponentsArray extends Array<ComponentRegistration<any>> {
     this.add(new ComponentRegistration({
       name: 'm-filter-row',
       type: FilterRowComponent,
-      view: './components/filter-row.html',
+      view: './components/filter-row/filter-row.html',
       position: componentPosition.afterColumns,
       layout: componentLayout.forEachColumn
     }), false);
     this.add(new ComponentRegistration({
       name: 'm-pagination',
       type: PaginationComponent,
-      view: './components/pagination.html',
+      view: './components/pagination/pagination.html',
       position: componentPosition.footer,
       layout: componentLayout.full
     }), false);
     this.add(new ComponentRegistration({
       name: 'm-toolbox',
       type: ToolboxComponent,
-      view: './components/toolbox.html',
+      view: './components/toolbox/toolbox.html',
       position: componentPosition.top,
       layout: componentLayout.full
     }), false);
     this.add(new ComponentRegistration({
       name: 'm-grouping',
       type: GroupingComponent,
-      view: './components/grouping.html',
+      view: './components/grouping/grouping.html',
       position: componentPosition.top,
       layout: componentLayout.full
     }), false);
     this.add(new ComponentRegistration({
       name: 'm-query-language',
       type: QueryLanguageComponent,
-      view: './components/query-language.html',
+      view: './components/query-language/query-language.html',
       position: componentPosition.afterColumns,
       layout: componentLayout.full
     }), false);
@@ -86,7 +86,7 @@ export class ComponentsArray extends Array<ComponentRegistration<any>> {
     this.add(new ComponentRegistration({
       name: 'm-column-chooser',
       type: ColumnChooserComponent,
-      view: './components/column-chooser.html',
+      view: './components/column-chooser/column-chooser.html',
       position: componentPosition.background
     }), false);
     this.add(new ComponentRegistration({

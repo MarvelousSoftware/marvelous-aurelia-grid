@@ -1,7 +1,7 @@
 import {Utils} from 'marvelous-aurelia-core/utils';
-import {ClientSideDataSource} from './clientSideDataSource';
-import {ServerSideDataSource} from './serverSideDataSource';
-import {IReadContext} from './dataSource';
+import {ClientSideDataSource} from './client-side-data-source';
+import {ServerSideDataSource} from './server-side-data-source';
+import {IReadContext} from './data-source';
 import {Grid} from '../grid';
 
 export class DataSourceManager {

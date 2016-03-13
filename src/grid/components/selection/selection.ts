@@ -1,6 +1,6 @@
 import {inject} from 'aurelia-dependency-injection';
 import {DataSource, GridOptions, GridInternals, GridComponent} from '../common-imports';
-import {IRowClickEvent, rowTypes, GridRenderer} from '../../gridRenderer';
+import {IRowClickEvent, rowTypes, GridRenderer} from '../../grid-renderer';
 
 @inject(GridInternals, GridOptions, DataSource)
 export class SelectionComponent extends GridComponent {
