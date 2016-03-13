@@ -132,16 +132,15 @@ export class ColumnChooserComponent extends GridComponent {
   }
 
   createOptions(): IColumnChooserOptions | boolean {
-    if(!this._gridOptions.domBased.has('column-chooser') && !this._gridOptions.codeBased.columnChooser) {
+    let chooser = this._gridOptions.reader.get('column-chooser');
+    
+    // TODO: chooser.truthy?
+    if(!chooser.defined || !chooser.evaluate()) {
       return false;
     }
     
-    let codeBased = this._gridOptions.codeBased.columnChooser || {};
-    let options = this._gridOptions.domBased.getSingleOrDefault('column-chooser');
-    options.defineIfUndefined('autoToolboxInit');
-        
     return {
-      autoToolboxInit: Utils.firstDefined(this.defaultOptions.autoToolboxInit, [codeBased.autoToolboxInit, options.get('autoToolboxInit').evaluate()])
+      autoToolboxInit: chooser.get('auto-toolbox-init').evaluate(this.defaultOptions.autoToolboxInit)
     };
   }
 }

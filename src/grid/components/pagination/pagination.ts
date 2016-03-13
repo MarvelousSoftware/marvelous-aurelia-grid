@@ -130,18 +130,16 @@ export class PaginationComponent extends GridComponent {
   }
   
   createOptions(): IPaginationOptions {
-    if(!this._gridOptions.domBased.has('pagination') && !this._gridOptions.codeBased.pagination) {
+    let pagination = this._gridOptions.reader.get('pagination');
+    
+    if(!pagination.defined || !pagination.evaluate()) {
       return;
     }
 
-    let pagination = this._gridOptions.domBased.getSingleOrDefault('pagination');    
-    pagination.defineIfUndefined('size', 'all', 'range');
-
-    let codeBased = this._gridOptions.codeBased.pagination || {};
     let options = {
-      size: codeBased.size || parseInt(pagination.get('size').evaluate()) || this.defaultOptions.size,
-      all: codeBased.all || pagination.get('all').evaluate() || this.defaultOptions.all,
-      range: codeBased.range || parseInt(pagination.get('range').evaluate()) || this.defaultOptions.range
+      size: parseInt(pagination.get('size').evaluate(this.defaultOptions.size)),
+      all: pagination.get('all').evaluate(this.defaultOptions.all),
+      range: parseInt(pagination.get('range').evaluate(this.defaultOptions.range))
     };
     return options;
   }  
