@@ -1,4 +1,4 @@
-import {GridTestHelpers} from '../../unitTesting/grid/base';
+import {GridTestHelpers} from '../../../unitTesting/grid/base';
 import {ColumnReorderingComponent} from './column-reordering';
 import {Column} from '../models/column';
 import {DomUtils} from 'marvelous-aurelia-core/utils';

@@ -1,8 +1,8 @@
-import {GridTestHelpers} from '../../unitTesting/grid/base';
-import {ColumnChooserComponent} from './column-chooser';
-import {ColumnReorderingComponent} from './column-reordering';
-import {ToolboxComponent} from './toolbox';
-import {Column} from '../models/column';
+import {GridTestHelpers} from '../../../unitTesting/grid/base';
+import {ColumnChooserComponent} from '../column-chooser';
+import {ColumnReorderingComponent} from '../column-reordering';
+import {ToolboxComponent} from '../toolbox';
+import {Column} from '../../models/column';
 
 describe('Column chooser component', () => {
   interface ITestColumns {

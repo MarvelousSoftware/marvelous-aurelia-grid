@@ -1,5 +1,5 @@
+import {GridTestHelpers} from '../../../unitTesting/grid/base';
 import {PaginationComponent, IPaginationOptions} from './pagination';
-import {GridTestHelpers} from '../../unitTesting/grid/base';
 
 describe('Pagination component', () => {
   let h: GridTestHelpers;

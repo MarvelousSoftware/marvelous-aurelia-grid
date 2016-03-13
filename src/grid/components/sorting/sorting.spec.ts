@@ -1,7 +1,7 @@
-import {GridTestHelpers} from '../../unitTesting/grid/base';
+import {GridTestHelpers} from '../../../unitTesting/grid/base';
 import {SortingComponent, SortingBucket, ISortingBucketOptions} from './sorting';
-import {sortingMode} from '../constants';
-import {Column} from '../models/column';
+import {sortingMode} from '../../constants';
+import {Column} from '../../models/column';
 
 describe('Sorting', () => {
   interface ITestColumns {

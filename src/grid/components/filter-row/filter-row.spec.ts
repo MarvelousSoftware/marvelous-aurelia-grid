@@ -1,4 +1,4 @@
-import {GridTestHelpers} from '../../unitTesting/grid/base';
+import {GridTestHelpers} from '../../../unitTesting/grid/base';
 import {FilterRowComponent} from './filter-row';
 import {Column} from '../models/column';
 
