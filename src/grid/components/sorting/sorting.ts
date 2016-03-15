@@ -130,17 +130,14 @@ export class SortingComponent extends GridComponent {
     return buckets[0].bucket;
   }
 
-  createOptions(): any {
-    if (!this._gridOptions.domBased.has('sorting') && !this._gridOptions.codeBased.sorting) {
+  createOptions(): ISortingOptions|boolean {
+    let sorting = this._gridOptions.reader.get('sorting');
+    if (!sorting.truthy) {
       return false;
     }
 
-    let sorting = this._gridOptions.domBased.getSingleOrDefault('sorting');
-    let codeBased = this._gridOptions.codeBased.sorting || {};
-    sorting.defineIfUndefined('mode');
-
     return {
-      mode: sorting.get('mode').evaluate() || codeBased.mode || this.defaultOptions.mode
+      mode: sorting.get('mode').evaluate(this.defaultOptions.mode)
     };
   }
 }

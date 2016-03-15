@@ -12,14 +12,13 @@ import {Column} from './models/column';
 import {DataSourceManager} from './data-source/data-source-manager';
 import {DataSource} from './data-source/data-source';
 import {ComponentsArray} from './pluginability'; 
-import {DOMSettingsReader} from '../domSettingsReader';
 import {GridInternals} from './grid-internals';
 import {GridOptions} from './grid-options';
 import {SelectionComponent} from './components';
 
 @customElement('m-grid')
 @processContent(false)
-@inject(Element, ComponentsArray, AureliaUtils, GridRenderer, DOMSettingsReader, OptionsReaderFactory, Container)
+@inject(Element, ComponentsArray, AureliaUtils, GridRenderer, OptionsReaderFactory, Container)
 export class Grid {
   @bindable({attribute:'options'}) codeDefinedOptions;
   viewModel: any;
@@ -33,7 +32,6 @@ export class Grid {
   dataSource: DataSource;
   aureliaUtils: AureliaUtils;
   
-  domSettingsReader: DOMSettingsReader;
   private _optionsReaderFactory: OptionsReaderFactory;
   optionsReader: OptionsReader;
   
@@ -48,11 +46,10 @@ export class Grid {
   private _stateContainerName = '__m-grid__';
 
   constructor(element: HTMLElement, components: ComponentsArray, aureliaUtils: AureliaUtils, renderer: GridRenderer, 
-  domSettingsReader: DOMSettingsReader, optionsReaderFactory: OptionsReaderFactory, container: Container) {
+  optionsReaderFactory: OptionsReaderFactory, container: Container) {
     this._domOptionsElement = <HTMLElement>element.cloneNode(true);
     this.components = components;
     this.aureliaUtils = aureliaUtils;
-    this.domSettingsReader = domSettingsReader;
     this._optionsReaderFactory = optionsReaderFactory;
     this.container = container;
 
@@ -86,10 +83,9 @@ export class Grid {
   
   bind(executionContext) {
     this.viewModel = executionContext;
-    this.domSettingsReader.init(this.viewModel, this._domOptionsElement);
     
     this.optionsReader = this._optionsReaderFactory.create(this.viewModel, this._domOptionsElement, this.codeDefinedOptions);
-    this.options = new GridOptions(this.internals, this.optionsReader, this.domSettingsReader, this.codeDefinedOptions);
+    this.options = new GridOptions(this.internals, this.optionsReader);
     this.options.validate();
     this.dataSource = new DataSourceManager(this).createDataSource();
 

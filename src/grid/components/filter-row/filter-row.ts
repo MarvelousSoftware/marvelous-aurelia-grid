@@ -247,7 +247,7 @@ export class FilterRowComponent extends GridComponent {
   createOptions() {
     let filterRow = this._gridOptions.reader.get('filter-row');
     
-    if(!filterRow.defined || !filterRow.evaluate()) {
+    if(!filterRow.truthy) {
       return false;
     }
 

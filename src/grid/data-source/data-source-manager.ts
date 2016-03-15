@@ -34,9 +34,9 @@ export class DataSourceManager {
   }
 
   createOptions() {
-    let ds = this.grid.options.codeBased.dataSource || {};
-    let domDs = this.grid.domSettingsReader.getSingleOrDefault('data-source');
-    ds.read = ds.read || domDs.get('read').evaluate(); 
+    let options = this.grid.options.reader.get('data-source');
+    let ds: any = {};
+    ds.read = options.get('read').evaluate(); 
     
     if(!ds.read) {
       throw new Error('dataSource.read method not defined. Please delare it in the options.');
@@ -50,7 +50,7 @@ export class DataSourceManager {
 		});
 
     ds.read = read;
-    ds.mode = ds.mode || domDs.get('mode').evaluate() || ClientSideDataSource.modeName;
+    ds.mode = options.get('mode').evaluate(ClientSideDataSource.modeName);
     ds.debounce = ds.debounce || 50;
     
     return ds;

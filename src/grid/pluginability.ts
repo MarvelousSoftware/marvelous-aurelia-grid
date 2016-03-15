@@ -2,7 +2,7 @@ import {inject, transient, Container} from 'aurelia-dependency-injection';
 import {Utils} from 'marvelous-aurelia-core/utils';
 import {componentLayout, componentPosition} from './constants';
 import {PaginationComponent, FilterRowComponent, SortingComponent, GroupingComponent, QueryLanguageComponent, ColumnChooserComponent,
-ToolboxComponent, ColumnReorderingComponent, SelectionComponent, Column} from './all';
+  ToolboxComponent, ColumnReorderingComponent, SelectionComponent, Column} from './all';
 import {Grid} from './grid';
 
 // TODO: allow to create a global ComponentRegistration in the plugin configuration
@@ -21,7 +21,7 @@ export class ComponentsArray extends Array<ComponentRegistration<any>> {
 
   init(grid: Grid) {
     this.grid = grid;
-    
+
     // stops all components instances on grid detach
     let detached = this.grid.internals.subscribe('Detached', () => {
       this.forEach(x => {
@@ -33,12 +33,14 @@ export class ComponentsArray extends Array<ComponentRegistration<any>> {
       });
       detached();
     });
-    
+
     // add user defined components
-    // TODO: use OptionsReader so that it could be in the DOM
-    let customComponents = this.grid.options.codeBased.components || [];
-    customComponents.forEach(x => this.add(x, false));
-    
+    // TODO: this will work only with code based approach since node cannot be evaluated
+    // maybe node should be evaluable, for instance with following syntax:
+    // <components><component component.bind="refreshComponent"></component><components> 
+    let customComponents = this.grid.options.reader.get('components').getAll('component');
+    customComponents.forEach(x => this.add(x.evaluate(), false));
+
     // add default components
     // these components then internally will specify
     // whether are enabled or disabled
@@ -117,14 +119,14 @@ export class ComponentsArray extends Array<ComponentRegistration<any>> {
       component._load();
     }
   }
-  
+
   private _checkNameUniqueness(name: string) {
     if (this.filter(x => x.name == name).length > 0) {
       throw new Error(`Component named as '${name}' is already defined.`);
     }
   }
-  
-  get<T extends GridComponent>(type: {new(...args): T}): ComponentRegistration<T> {
+
+  get<T extends GridComponent>(type: { new (...args): T }): ComponentRegistration<T> {
     let components = this.filter(x => x.type === type);
     if (!components.length) {
       return undefined;
@@ -154,7 +156,7 @@ export class ComponentsArray extends Array<ComponentRegistration<any>> {
 
     return instances;
   }
-  
+
   /**
    * Invokes action for each instance with defined given method.
    */
@@ -183,12 +185,12 @@ export interface IComponentRegistrationDefinition {
    * Name of the component.
    */
   name: string;
-  
+
   /**
    * Component's constructor function.
    */
-  type: Function, 
-  
+  type: Function,
+
   /**
    * Place where component will be rendered. Available values:
    * - 'top'
@@ -199,12 +201,12 @@ export interface IComponentRegistrationDefinition {
    * Background renders underneath the grid, but only if `view` is provided.
    */
   position: string,
-  
+
   /**
    * Absolute path to the view. Not required if position is 'background'.
    */
   view?: string,
-  
+
   /**
    * Controls the component appearance. Available values:
    * 'full' - full row is being used by the component 
@@ -288,7 +290,7 @@ export class ComponentRegistration<T extends GridComponent> {
         break;
     }
   }
-  
+
   /**
    * Enables the component.
    */
@@ -315,7 +317,7 @@ export class ComponentRegistration<T extends GridComponent> {
       }
     }
   }
-  
+
   /**
    * Disables the component.
    */
@@ -334,7 +336,7 @@ export class ComponentRegistration<T extends GridComponent> {
       }
     }
   }
-  
+
   /**
    * Gets all instances associated with current component.
    */
@@ -356,7 +358,7 @@ export class ComponentRegistration<T extends GridComponent> {
     }
     this._load();
   }
-  
+
   /**
    * Creates view models. Depending on the layout it may create a single view model
    * or view models for each column.
@@ -385,7 +387,7 @@ export class ComponentRegistration<T extends GridComponent> {
 export class GridComponent {
   options: any;
   subs: (() => void)[] = [];
-  
+
   /**
    * Creates options and starts the component with `start` method.
    * @returns boolean
@@ -399,20 +401,20 @@ export class GridComponent {
     this.start();
     return true;
   }
-  
+
   /**
    * Called if component is about to disable.
    */
   disable() {
     this.stop();
   }
-  
+
   /**
    * Starts the component. Uses already created options if needed.
    */
   start() {
   }
-  
+
   /**
    * Unregisters subs. Called on grid detach.
    */
@@ -422,7 +424,7 @@ export class GridComponent {
       this.subs = [];
     }
   }
-  
+
   /**
    * In derived class creates component specific options. If `enable` method is not overriden
    * then this method has to return object castable to `true` in order to make component enabled. 
@@ -430,14 +432,14 @@ export class GridComponent {
   createOptions(): any {
     return {};
   }
-  
+
   /**
    * Saves the current state of a component so that it could be loaded some time in the future.
    * This method should attach properties to the `state` parameter.
    */
   saveState(state: any): void {
   }
-  
+
   /**
    * Loads state.
    */

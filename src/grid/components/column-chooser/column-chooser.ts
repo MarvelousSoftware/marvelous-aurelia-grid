@@ -134,8 +134,7 @@ export class ColumnChooserComponent extends GridComponent {
   createOptions(): IColumnChooserOptions | boolean {
     let chooser = this._gridOptions.reader.get('column-chooser');
     
-    // TODO: chooser.truthy?
-    if(!chooser.defined || !chooser.evaluate()) {
+    if(!chooser.truthy) {
       return false;
     }
     

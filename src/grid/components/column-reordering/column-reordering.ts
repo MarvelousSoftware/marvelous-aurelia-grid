@@ -157,7 +157,7 @@ export class ColumnReorderingComponent extends GridComponent {
   createOptions() {
     let columnReordering = this._gridOptions.reader.get('column-reordering');
     
-    if(!columnReordering.defined || !columnReordering.evaluate()) {
+    if(!columnReordering.truthy) {
       return false;
     }
 

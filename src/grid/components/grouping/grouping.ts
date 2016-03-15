@@ -273,7 +273,8 @@ export class GroupingComponent extends GridComponent {
   }
 
   createOptions() {
-    if(!this._gridOptions.domBased.has('grouping') && !this._gridOptions.codeBased.grouping) {
+    let grouping = this._gridOptions.reader.get('grouping');
+    if(!grouping.truthy) {
       return false;
     }
 

@@ -3,25 +3,31 @@ import {GridComponent, GridOptions} from '../../all';
 
 @inject(GridOptions)
 export class ToolboxComponent extends GridComponent {
-  buttons = [];
+  buttons: IToolboxButton[] = [];
 
   constructor(private _gridOptions: GridOptions) {
     super();
   }
 
-  addButton(button) {
+  addButton(button: IToolboxButton) {
     if(!button.text || !button.click) {
-      throw new Error("Missing text or click handler.");
+      throw new Error(`Missing text or click handler.`);
     }
 
     this.buttons.push(button);
   }
 
   createOptions() {
-    if(!this._gridOptions.domBased.has('toolbox') && !this._gridOptions.codeBased.toolbox) {
+    let toolbox = this._gridOptions.reader.get('toolbox');
+    if(!toolbox.truthy) {
       return false;
     }
 
     return {};
   }
+}
+
+export interface IToolboxButton {
+  text: string;
+  click: Function;
 }

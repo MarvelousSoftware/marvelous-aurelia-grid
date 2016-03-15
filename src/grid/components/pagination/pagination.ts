@@ -132,7 +132,7 @@ export class PaginationComponent extends GridComponent {
   createOptions(): IPaginationOptions {
     let pagination = this._gridOptions.reader.get('pagination');
     
-    if(!pagination.defined || !pagination.evaluate()) {
+    if(!pagination.truthy) {
       return;
     }
 

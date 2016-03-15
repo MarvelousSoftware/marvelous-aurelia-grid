@@ -4,14 +4,12 @@ import {GridInternals} from '../../grid/grid-internals';
 import {Column} from '../../grid/models/column';
 import {IColumnDragAndDropListener} from '../../grid/column';
 import {initialize} from 'aurelia-pal-browser';
-import {DOMSettingsReader} from '../../domSettingsReader';
 import {AureliaUtils} from 'marvelous-aurelia-core/aureliaUtils';
 import {OptionsReaderFactory} from 'marvelous-aurelia-core/optionsReader';
 //import '../mutationObserverShim';
 
 export class GridTestHelpers {
 	container: Container;
-  reader: DOMSettingsReader;
   readerFactory: OptionsReaderFactory;
   gridInternals: IGridInternalsMock;
   dataSource: IDataSourceMock;
@@ -23,7 +21,6 @@ export class GridTestHelpers {
 	beforeEach() {
 		initialize();
 		this.container = new Container();
-		this.reader = this.container.get(DOMSettingsReader);
     this.readerFactory = this.container.get(OptionsReaderFactory);
 		this.gridInternals = this.createGridInternalsMock();
 		this.dataSource = this.createDataSourceMock();
@@ -34,8 +31,7 @@ export class GridTestHelpers {
 	getGridOptions(codeBased: any, domBased: string): GridOptions {
 		let settings = document.createElement('settings');
     settings.innerHTML = domBased;    
-    this.reader.init({}, settings);
-    return new GridOptions(null, this.readerFactory.create({}, settings, codeBased), this.reader, codeBased);
+    return new GridOptions(null, this.readerFactory.create({}, settings, codeBased));
 	}
 	
 	getColumn(attributes: any) {

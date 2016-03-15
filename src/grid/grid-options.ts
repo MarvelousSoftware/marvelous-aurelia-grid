@@ -1,6 +1,5 @@
 import {Column} from './models/column';
 import {GridInternals} from './grid-internals';
-import {DOMSettingsReader} from '../domSettingsReader';
 import {OptionsReader} from 'marvelous-aurelia-core/optionsReader';
 
 export class GridOptions {
@@ -9,15 +8,9 @@ export class GridOptions {
    * NOTE: code based defined columns has higher priority.
    */
   columns: Column[] = [];
-  
-  /**
-   * All code based defined options.
-   */
-  codeBased: any = {};
 
-  constructor(private _gridInternals: GridInternals, public reader: OptionsReader, public domBased: DOMSettingsReader, codeBasedOptions: any) {
+  constructor(private _gridInternals: GridInternals, public reader: OptionsReader) {
     this._parseDomBasedOptions();
-    this._parseCodeBasedOptions(codeBasedOptions);
   }
 
   validate() {
@@ -49,10 +42,6 @@ export class GridOptions {
       // TODO: allow to specify a template in code based approach
       this.columns.push(new Column(++id, attrs, element.innerHTML, this._gridInternals));
     });
-  }
-
-  private _parseCodeBasedOptions(options) {
-    this.codeBased = options || this.codeBased;
   }
 
   // TODO: ColumnsArray extends Column[] ??

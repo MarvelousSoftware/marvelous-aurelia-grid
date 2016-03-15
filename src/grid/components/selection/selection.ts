@@ -52,7 +52,7 @@ export class SelectionComponent extends GridComponent {
 
   createOptions(): ISelectionOptions {
     let selection = this._gridOptions.reader.get('selection');
-    if (!selection.defined) {
+    if (!selection.truthy) {
       return;
     }
 

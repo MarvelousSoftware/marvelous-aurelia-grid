@@ -1,10 +1,11 @@
 import {inject} from 'aurelia-dependency-injection';
 import {GridComponent, PaginationComponent, GridOptions, GridInternals, DataSource, ComponentsArray} from '../../all';
-import {IQueryLanguageOptions, QueryLanguage} from 'marvelous-aurelia-query-language'
+import {IQueryLanguageOptions as IMqlOptions, QueryLanguage} from 'marvelous-aurelia-query-language'
 
 @inject(GridOptions, GridInternals, DataSource, ComponentsArray)
 export class QueryLanguageComponent extends GridComponent {
-  editorOptions: IQueryLanguageOptions = {
+  options: IQueryLanguageOptions;
+  editorOptions: IMqlOptions = {
     inlineButton: false,
     submitOnFocusOut: true
   };
@@ -48,16 +49,19 @@ export class QueryLanguageComponent extends GridComponent {
     return this._gridInternals.refresh();
   }
 
-  createOptions(): any {
-    if(!this._gridOptions.domBased.has('query-language') && !this._gridOptions.codeBased.queryLanguage) {
+  createOptions(): IQueryLanguageOptions|boolean {
+    let options = this._gridOptions.reader.get('query-language');
+    
+    if(!options.truthy) {
        return false;
     }
     
-    let language = this._gridOptions.domBased.getSingleOrDefault('query-language');
-    language.defineIfUndefined('autoComplete');
-    
     return {
-      autoComplete: language.get('autoComplete').evaluate() || false
+      autoComplete: options.get('auto-complete').evaluate(false)
     }
   }
+}
+
+export interface IQueryLanguageOptions {
+  autoComplete: string;
 }
