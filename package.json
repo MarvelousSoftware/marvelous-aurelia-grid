@@ -83,8 +83,8 @@
   },
   "marvelous": {
     "projects": {
-      "core": "../marvelous-aurelia-core/",
-      "queryLanguage": "../marvelous-aurelia-query-language/"
+      "marvelous-aurelia-core": "../marvelous-aurelia-core/",
+      "marvelous-aurelia-query-language": "../marvelous-aurelia-query-language/"
     }
   }
 }
