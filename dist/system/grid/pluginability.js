@@ -61,35 +61,35 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                     this.add(new ComponentRegistration({
                         name: 'm-filter-row',
                         type: all_1.FilterRowComponent,
-                        view: './components/filter-row.html',
+                        view: './components/filter-row/filter-row.html',
                         position: constants_1.componentPosition.afterColumns,
                         layout: constants_1.componentLayout.forEachColumn
                     }), false);
                     this.add(new ComponentRegistration({
                         name: 'm-pagination',
                         type: all_1.PaginationComponent,
-                        view: './components/pagination.html',
+                        view: './components/pagination/pagination.html',
                         position: constants_1.componentPosition.footer,
                         layout: constants_1.componentLayout.full
                     }), false);
                     this.add(new ComponentRegistration({
                         name: 'm-toolbox',
                         type: all_1.ToolboxComponent,
-                        view: './components/toolbox.html',
+                        view: './components/toolbox/toolbox.html',
                         position: constants_1.componentPosition.top,
                         layout: constants_1.componentLayout.full
                     }), false);
                     this.add(new ComponentRegistration({
                         name: 'm-grouping',
                         type: all_1.GroupingComponent,
-                        view: './components/grouping.html',
+                        view: './components/grouping/grouping.html',
                         position: constants_1.componentPosition.top,
                         layout: constants_1.componentLayout.full
                     }), false);
                     this.add(new ComponentRegistration({
                         name: 'm-query-language',
                         type: all_1.QueryLanguageComponent,
-                        view: './components/query-language.html',
+                        view: './components/query-language/query-language.html',
                         position: constants_1.componentPosition.afterColumns,
                         layout: constants_1.componentLayout.full
                     }), false);
@@ -101,7 +101,7 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                     this.add(new ComponentRegistration({
                         name: 'm-column-chooser',
                         type: all_1.ColumnChooserComponent,
-                        view: './components/column-chooser.html',
+                        view: './components/column-chooser/column-chooser.html',
                         position: constants_1.componentPosition.background
                     }), false);
                     this.add(new ComponentRegistration({
@@ -109,6 +109,11 @@ System.register(['aurelia-dependency-injection', 'marvelous-aurelia-core/utils',
                         type: all_1.ColumnReorderingComponent,
                         position: constants_1.componentPosition.background
                     }), false);
+                    this.add(new ComponentRegistration({
+                        name: 'm-selection',
+                        type: all_1.SelectionComponent,
+                        position: constants_1.componentPosition.background
+                    }));
                     this.forEach(function (x) { return x._load(); });
                 };
                 ComponentsArray.prototype.add = function (component, autoLoad) {

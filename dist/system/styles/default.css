@@ -434,3 +434,10 @@ textarea.m-form-control {
     border-top: 0; }
   .m-grid .m-filter-row .m-row-filtering-wrapper select {
     border-radius: 0; }
+
+.m-grid table tbody tr.m-grid-data-row.m-row-selected {
+  background-color: #18bc9c;
+  color: #fff; }
+  .m-grid table tbody tr.m-grid-data-row.m-row-selected td {
+    border-color: #15a589;
+    border-bottom-color: #15a589; }

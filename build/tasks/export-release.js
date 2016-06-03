@@ -12,10 +12,10 @@ gulp.task('clean-export', function () {
 });
 
 gulp.task('export-copy-dev-output', function () {
-  return Promise.all([copyDevOutput('amd'), copyDevOutput('common'), copyDevOutput('system')]);
+  return Promise.all([copyDevOutput('amd'), copyDevOutput('commonjs'), copyDevOutput('system')]);
 });
 gulp.task('export-copy-tsd', function () {
-  return Promise.all([copyTsd(''), copyTsd('amd'), copyTsd('common'), copyTsd('system')]);
+  return Promise.all([copyTsd(''), copyTsd('amd'), copyTsd('commonjs'), copyTsd('system')]);
 });
 
 // use after prepare-release
