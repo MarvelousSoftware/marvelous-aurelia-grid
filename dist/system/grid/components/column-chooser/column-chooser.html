@@ -1,0 +1,24 @@
+<template>
+  <require from="../../column"></require>
+  <require from="../../../dragAndDrop/draggable"></require>
+
+  <div class="m-grid-column-chooser ${overDroppable ? 'm-grid-column-chooser-droppable' : ''}">
+    <div m-draggable class="m-grid-popup ${hidden ? 'm-grid-popup-hidden' : 'm-grid-popup-visible'}">
+      <div m-draggable-handle class="m-grid-popup-header">
+        <button click.delegate="togglePopUp()" type="button" class="m-grid-popup-close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="m-grid-popup-title">
+          ${'column-chooser/title' | mGridTranslate & signal:'m-grid-refresh-translations'}
+        </h4>
+      </div>
+      <div class="m-grid-popup-body">
+        <m-grid-column repeat.for="column of columns" column.bind="column" grid.bind="$parent._gridInternals._grid">
+        </m-grid-column>
+        <div if.bind="!columns.length">
+          ${'column-chooser/empty' | mGridTranslate & signal:'m-grid-refresh-translations'}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

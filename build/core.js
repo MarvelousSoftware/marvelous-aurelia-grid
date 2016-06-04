@@ -14,7 +14,7 @@ function swallowError(error) {
 }
 
 function buildTypeScript(files, relativePath, module) {
-  var options = assign({ module: module }, typeScriptOptions.compilerOptions);
+  var options = assign(typeScriptOptions.compilerOptions, { "module": module });
   return gulp.src(files)
     .pipe(changed(paths.output + relativePath, {extension: '.js'}))
     //.pipe(filelog('Compiling typescript'))

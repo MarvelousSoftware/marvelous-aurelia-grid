@@ -1,4 +1,4 @@
-System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelous-aurelia-core/utils', 'marvelous-aurelia-core/optionsReader', 'marvelous-aurelia-core/aureliaUtils', './gridRenderer', './dataSource/dataSourceManager', './pluginability', '../domSettingsReader', './gridInternals', './gridOptions'], function(exports_1, context_1) {
+System.register(['aurelia-templating', 'aurelia-dependency-injection', 'aurelia-templating-resources', 'marvelous-aurelia-core/utils', 'marvelous-aurelia-core/optionsReader', 'marvelous-aurelia-core/aureliaUtils', './config', './grid-renderer', './data-source/data-source-manager', './pluginability', '../domSettingsReader', './grid-internals', './grid-options', './components'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -7,7 +7,7 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
         else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
-    var aurelia_templating_1, aurelia_dependency_injection_1, utils_1, optionsReader_1, aureliaUtils_1, gridRenderer_1, dataSourceManager_1, pluginability_1, domSettingsReader_1, gridInternals_1, gridOptions_1;
+    var aurelia_templating_1, aurelia_dependency_injection_1, aurelia_templating_resources_1, utils_1, optionsReader_1, aureliaUtils_1, config_1, grid_renderer_1, data_source_manager_1, pluginability_1, domSettingsReader_1, grid_internals_1, grid_options_1, components_1;
     var Grid;
     return {
         setters:[
@@ -16,6 +16,9 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
             },
             function (aurelia_dependency_injection_1_1) {
                 aurelia_dependency_injection_1 = aurelia_dependency_injection_1_1;
+            },
+            function (aurelia_templating_resources_1_1) {
+                aurelia_templating_resources_1 = aurelia_templating_resources_1_1;
             },
             function (utils_1_1) {
                 utils_1 = utils_1_1;
@@ -26,11 +29,14 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
             function (aureliaUtils_1_1) {
                 aureliaUtils_1 = aureliaUtils_1_1;
             },
-            function (gridRenderer_1_1) {
-                gridRenderer_1 = gridRenderer_1_1;
+            function (config_1_1) {
+                config_1 = config_1_1;
             },
-            function (dataSourceManager_1_1) {
-                dataSourceManager_1 = dataSourceManager_1_1;
+            function (grid_renderer_1_1) {
+                grid_renderer_1 = grid_renderer_1_1;
+            },
+            function (data_source_manager_1_1) {
+                data_source_manager_1 = data_source_manager_1_1;
             },
             function (pluginability_1_1) {
                 pluginability_1 = pluginability_1_1;
@@ -38,11 +44,14 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
             function (domSettingsReader_1_1) {
                 domSettingsReader_1 = domSettingsReader_1_1;
             },
-            function (gridInternals_1_1) {
-                gridInternals_1 = gridInternals_1_1;
+            function (grid_internals_1_1) {
+                grid_internals_1 = grid_internals_1_1;
             },
-            function (gridOptions_1_1) {
-                gridOptions_1 = gridOptions_1_1;
+            function (grid_options_1_1) {
+                grid_options_1 = grid_options_1_1;
+            },
+            function (components_1_1) {
+                components_1 = components_1_1;
             }],
         execute: function() {
             Grid = (function () {
@@ -57,23 +66,38 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
                     this._optionsReaderFactory = optionsReaderFactory;
                     this.container = container;
                     this.renderer = renderer;
-                    this.internals = new gridInternals_1.GridInternals(this);
+                    this.internals = new grid_internals_1.GridInternals(this);
                     this.internals.element = element;
                     renderer.init(this);
                     // gets rid of options defined via dom
                     // these options are already copied anyway
                     utils_1.DomUtils.clearInnerHtml(element);
                 }
+                /**
+                 * Refreshes grid translations.
+                 */
+                Grid.refreshTranslations = function () {
+                    var signaler = aurelia_dependency_injection_1.Container.instance.get(aurelia_templating_resources_1.BindingSignaler);
+                    signaler.signal('m-grid-refresh-translations');
+                };
+                /**
+                 * Changes the current language and refreshes translations instantly.
+                 */
+                Grid.changeLanguage = function (language) {
+                    config_1.gridConfig.language = language;
+                    Grid.refreshTranslations();
+                };
                 Grid.prototype.bind = function (executionContext) {
                     var _this = this;
                     this.viewModel = executionContext;
                     this.domSettingsReader.init(this.viewModel, this._domOptionsElement);
                     this.optionsReader = this._optionsReaderFactory.create(this.viewModel, this._domOptionsElement, this.codeDefinedOptions);
-                    this.options = new gridOptions_1.GridOptions(this.internals, this.optionsReader, this.domSettingsReader, this.codeDefinedOptions);
+                    this.options = new grid_options_1.GridOptions(this.internals, this.optionsReader, this.domSettingsReader, this.codeDefinedOptions);
                     this.options.validate();
-                    this.dataSource = new dataSourceManager_1.DataSourceManager(this).createDataSource();
+                    this.dataSource = new data_source_manager_1.DataSourceManager(this).createDataSource();
                     this.internals.mainColumns = this.options.columns.filter(function (x) { return !x.hidden; });
                     this.components.init(this);
+                    this.selection = this.components.get(components_1.SelectionComponent).instance;
                     this.subs.push(this.aureliaUtils.observe(this.internals, 'mainColumns', function () { return _this.renderer.render(); }));
                 };
                 Grid.prototype.attached = function () {
@@ -153,7 +177,7 @@ System.register(['aurelia-templating', 'aurelia-dependency-injection', 'marvelou
                 Grid = __decorate([
                     aurelia_templating_1.customElement('m-grid'),
                     aurelia_templating_1.processContent(false),
-                    aurelia_dependency_injection_1.inject(Element, pluginability_1.ComponentsArray, aureliaUtils_1.AureliaUtils, gridRenderer_1.GridRenderer, domSettingsReader_1.DOMSettingsReader, optionsReader_1.OptionsReaderFactory, aurelia_dependency_injection_1.Container)
+                    aurelia_dependency_injection_1.inject(Element, pluginability_1.ComponentsArray, aureliaUtils_1.AureliaUtils, grid_renderer_1.GridRenderer, domSettingsReader_1.DOMSettingsReader, optionsReader_1.OptionsReaderFactory, aurelia_dependency_injection_1.Container)
                 ], Grid);
                 return Grid;
             }());

@@ -4,7 +4,7 @@
   "author": "Damian Kaminski",
   "license": "GNU General Public License",
   "homepage": "http://marvelous.software/docs.html#/grid",
-  "main": "dist/common/grid.js",
+  "main": "dist/commonjs/grid.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/MarvelousSoftware/marvelous-aurelia-grid"

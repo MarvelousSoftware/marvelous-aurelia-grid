@@ -50,7 +50,7 @@
         <tfoot>
           <tr class="m-grid-empty" if.bind="initialized && !internals.loading && (dataSource.result.data.length === 0 || !dataSource.result)">
             <td colspan="${internals.mainColumns.length}">
-              No records found.
+              ${'grid/no-records' | mGridTranslate & signal:'m-grid-refresh-translations'}
             </td>
           </tr>
           <tr class="m-grid-standard-loading">

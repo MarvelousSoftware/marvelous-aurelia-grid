@@ -1,18 +1,18 @@
-System.register(['aurelia-dependency-injection', '../../grid/gridOptions', '../../grid/gridInternals', '../../grid/models/column', 'aurelia-pal-browser', '../../domSettingsReader', 'marvelous-aurelia-core/optionsReader'], function(exports_1, context_1) {
+System.register(['aurelia-dependency-injection', '../../grid/grid-options', '../../grid/grid-internals', '../../grid/models/column', 'aurelia-pal-browser', '../../domSettingsReader', 'marvelous-aurelia-core/optionsReader'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var aurelia_dependency_injection_1, gridOptions_1, gridInternals_1, column_1, aurelia_pal_browser_1, domSettingsReader_1, optionsReader_1;
+    var aurelia_dependency_injection_1, grid_options_1, grid_internals_1, column_1, aurelia_pal_browser_1, domSettingsReader_1, optionsReader_1;
     var GridTestHelpers;
     return {
         setters:[
             function (aurelia_dependency_injection_1_1) {
                 aurelia_dependency_injection_1 = aurelia_dependency_injection_1_1;
             },
-            function (gridOptions_1_1) {
-                gridOptions_1 = gridOptions_1_1;
+            function (grid_options_1_1) {
+                grid_options_1 = grid_options_1_1;
             },
-            function (gridInternals_1_1) {
-                gridInternals_1 = gridInternals_1_1;
+            function (grid_internals_1_1) {
+                grid_internals_1 = grid_internals_1_1;
             },
             function (column_1_1) {
                 column_1 = column_1_1;
@@ -27,6 +27,7 @@ System.register(['aurelia-dependency-injection', '../../grid/gridOptions', '../.
                 optionsReader_1 = optionsReader_1_1;
             }],
         execute: function() {
+            //import '../mutationObserverShim';
             GridTestHelpers = (function () {
                 function GridTestHelpers() {
                     this._i = 1;
@@ -45,7 +46,7 @@ System.register(['aurelia-dependency-injection', '../../grid/gridOptions', '../.
                     var settings = document.createElement('settings');
                     settings.innerHTML = domBased;
                     this.reader.init({}, settings);
-                    return new gridOptions_1.GridOptions(null, this.readerFactory.create({}, settings), this.reader, codeBased);
+                    return new grid_options_1.GridOptions(null, this.readerFactory.create({}, settings, codeBased), this.reader, codeBased);
                 };
                 GridTestHelpers.prototype.getColumn = function (attributes) {
                     return new column_1.Column(this._i++, attributes, '', this.gridInternals);
@@ -68,10 +69,13 @@ System.register(['aurelia-dependency-injection', '../../grid/gridOptions', '../.
                     return components;
                 };
                 GridTestHelpers.prototype.createGridInternalsMock = function () {
-                    var base = new gridInternals_1.GridInternals(null);
+                    var base = new grid_internals_1.GridInternals(null);
                     var internals = {
                         mainColumns: [],
                         refresh: sinon.spy()
+                    };
+                    internals.renderer = {
+                        rows: []
                     };
                     internals.subscribe = function (event, callback) {
                         internals.subscribe.subscribers.push({

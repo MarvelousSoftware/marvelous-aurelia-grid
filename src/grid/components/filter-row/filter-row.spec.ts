@@ -1,6 +1,6 @@
 import {GridTestHelpers} from '../../../unitTesting/grid/base';
 import {FilterRowComponent} from './filter-row';
-import {Column} from '../models/column';
+import {Column} from '../../models/column';
 
 describe('FilterRow component', () => {
   let h: GridTestHelpers;

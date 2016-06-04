@@ -1,4 +1,4 @@
-System.register(['./components/pagination', './components/filter-row', './components/sorting', './components/grouping', './components/query-language', './components/column-chooser', './components/toolbox', './components/column-reordering', './dataSource/dataSource', './dataSource/dataSourceManager', './dataSource/clientSideDataSource', './dataSource/serverSideDataSource', './models/column', './constants', './column', './grid', './gridRenderer', './pluginability', './gridInternals', './gridOptions'], function(exports_1, context_1) {
+System.register(['./components', './data-source/data-source', './data-source/data-source-manager', './data-source/client-side-data-source', './data-source/server-side-data-source', './models/column', './constants', './column', './grid', './grid-renderer', './pluginability', './grid-internals', './grid-options'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function exportStar_1(m) {
@@ -10,41 +10,20 @@ System.register(['./components/pagination', './components/filter-row', './compon
     }
     return {
         setters:[
-            function (pagination_1_1) {
-                exportStar_1(pagination_1_1);
+            function (components_1_1) {
+                exportStar_1(components_1_1);
             },
-            function (filter_row_1_1) {
-                exportStar_1(filter_row_1_1);
+            function (data_source_1_1) {
+                exportStar_1(data_source_1_1);
             },
-            function (sorting_1_1) {
-                exportStar_1(sorting_1_1);
+            function (data_source_manager_1_1) {
+                exportStar_1(data_source_manager_1_1);
             },
-            function (grouping_1_1) {
-                exportStar_1(grouping_1_1);
+            function (client_side_data_source_1_1) {
+                exportStar_1(client_side_data_source_1_1);
             },
-            function (query_language_1_1) {
-                exportStar_1(query_language_1_1);
-            },
-            function (column_chooser_1_1) {
-                exportStar_1(column_chooser_1_1);
-            },
-            function (toolbox_1_1) {
-                exportStar_1(toolbox_1_1);
-            },
-            function (column_reordering_1_1) {
-                exportStar_1(column_reordering_1_1);
-            },
-            function (dataSource_1_1) {
-                exportStar_1(dataSource_1_1);
-            },
-            function (dataSourceManager_1_1) {
-                exportStar_1(dataSourceManager_1_1);
-            },
-            function (clientSideDataSource_1_1) {
-                exportStar_1(clientSideDataSource_1_1);
-            },
-            function (serverSideDataSource_1_1) {
-                exportStar_1(serverSideDataSource_1_1);
+            function (server_side_data_source_1_1) {
+                exportStar_1(server_side_data_source_1_1);
             },
             function (column_1_1) {
                 exportStar_1(column_1_1);
@@ -58,17 +37,17 @@ System.register(['./components/pagination', './components/filter-row', './compon
             function (grid_1_1) {
                 exportStar_1(grid_1_1);
             },
-            function (gridRenderer_1_1) {
-                exportStar_1(gridRenderer_1_1);
+            function (grid_renderer_1_1) {
+                exportStar_1(grid_renderer_1_1);
             },
             function (pluginability_1_1) {
                 exportStar_1(pluginability_1_1);
             },
-            function (gridInternals_1_1) {
-                exportStar_1(gridInternals_1_1);
+            function (grid_internals_1_1) {
+                exportStar_1(grid_internals_1_1);
             },
-            function (gridOptions_1_1) {
-                exportStar_1(gridOptions_1_1);
+            function (grid_options_1_1) {
+                exportStar_1(grid_options_1_1);
             }],
         execute: function() {
         }

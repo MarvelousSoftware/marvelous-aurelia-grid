@@ -1,0 +1,7 @@
+<template>
+  <div class="m-grid-std-padding">
+    <button type="button" class="m-btn m-btn-default" repeat.for="button of buttons" click.delegate="button.click()">
+      ${button.text | mGridTranslate & signal:'m-grid-refresh-translations'}
+    </button>
+  </div>
+</template>

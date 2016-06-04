@@ -44,6 +44,24 @@ declare module "marvelous-aurelia-grid/domSettingsReader" {
 	    evaluate(): any;
 	}
 }
+declare module "marvelous-aurelia-grid/grid/config" {
+	export interface IGridConfig {
+	    /**
+	     * Current language.
+	     */
+	    language: string;
+	    /**
+	     * If current language has missing keys then this language will be used to
+	     * get translations.
+	     */
+	    fallbackLanguage: string;
+	    /**
+	     * All available translations.
+	     */
+	    translations: any;
+	}
+	export let gridConfig: IGridConfig;
+}
 declare module "marvelous-aurelia-grid/grid/constants" {
 	export let componentPosition: {
 	    footer: string;
@@ -192,68 +210,6 @@ declare module "marvelous-aurelia-grid/grid/pluginability" {
 	    instance: GridComponent;
 	}
 }
-declare module "marvelous-aurelia-grid/grid/gridRenderer" {
-	import { IDataRow, Grid, Column } from 'marvelous-aurelia-grid/grid/all';
-	import { Compiler } from 'marvelous-aurelia-core/compiler';
-	export class GridRenderer {
-	    rows: IDataRow[];
-	    groups: any[];
-	    tableDataViewFactory: any;
-	    grid: Grid;
-	    compiler: Compiler;
-	    constructor(compiler: Compiler);
-	    init(grid: Grid): void;
-	    render(): void;
-	    private createRows();
-	}
-	export interface IDataRow {
-	    grid: Grid;
-	    type: string;
-	    column?: Column;
-	    value?: any;
-	    level: Number;
-	    data?: any;
-	}
-}
-declare module "marvelous-aurelia-grid/grid/dataSource/clientSideDataSource" {
-	import { DataSource, IDataSourceResult } from 'marvelous-aurelia-grid/grid/all';
-	export class ClientSideDataSource extends DataSource {
-	    static modeName: string;
-	    transformResult(result: any, params: any): IDataSourceResult;
-	    addItem(item: any): void;
-	    removeItem(item: any): void;
-	}
-}
-declare module "marvelous-aurelia-grid/grid/dataSource/serverSideDataSource" {
-	import { DataSource, IDataSourceResult } from 'marvelous-aurelia-grid/grid/all';
-	export class ServerSideDataSource extends DataSource {
-	    static modeName: string;
-	    private _getOnlyVisible;
-	    constructor(grid: any, options: any);
-	    /**
-	     * Serializes parameters.
-	     */
-	    beforeRead(params: any): {
-	        marvelousParams: string;
-	    };
-	    transformResult(result: any, params: any): IDataSourceResult;
-	    addItem(item: any): void;
-	    removeItem(item: any): void;
-	}
-}
-declare module "marvelous-aurelia-grid/grid/dataSource/dataSourceManager" {
-	import { Grid } from 'marvelous-aurelia-grid/grid/grid';
-	export class DataSourceManager {
-	    grid: Grid;
-	    private _dataSources;
-	    private _options;
-	    constructor(grid: Grid);
-	    add(mode: any, create: any): void;
-	    createDataSource(): any;
-	    createOptions(): any;
-	    static createReadMethod(read: any): any;
-	}
-}
 declare module "marvelous-aurelia-grid/dragAndDrop/draggabilityCore" {
 	export class DraggabilityCore {
 	    config: {
@@ -320,10 +276,11 @@ declare module "marvelous-aurelia-grid/grid/column" {
 	    canceled?: (e: any, el: HTMLElement, column: Column) => void;
 	}
 }
-declare module "marvelous-aurelia-grid/grid/gridInternals" {
+declare module "marvelous-aurelia-grid/grid/grid-internals" {
 	import { Grid } from 'marvelous-aurelia-grid/grid/grid';
 	import { Column } from 'marvelous-aurelia-grid/grid/models/column';
 	import { IColumnDragAndDropListener } from 'marvelous-aurelia-grid/grid/column';
+	import { GridRenderer } from 'marvelous-aurelia-grid/grid/grid-renderer';
 	export class GridInternals {
 	    private _grid;
 	    columnsDraggabilityEnabled: boolean;
@@ -343,6 +300,7 @@ declare module "marvelous-aurelia-grid/grid/gridInternals" {
 	    private _pubSub;
 	    constructor(_grid: Grid);
 	    id: any;
+	    renderer: GridRenderer;
 	    makeColumnsDraggable(): void;
 	    listenOnDragAndDrop(listener: IColumnDragAndDropListener): void;
 	    publish(name: string, payload: any): void;
@@ -363,231 +321,12 @@ declare module "marvelous-aurelia-grid/grid/gridInternals" {
 	    getInstancesOfGridServices(): any[];
 	}
 }
-declare module "marvelous-aurelia-grid/grid/grid" {
-	import { Container } from 'aurelia-dependency-injection';
-	import { OptionsReaderFactory, OptionsReader } from 'marvelous-aurelia-core/optionsReader';
-	import { AureliaUtils } from 'marvelous-aurelia-core/aureliaUtils';
-	import { GridRenderer } from 'marvelous-aurelia-grid/grid/gridRenderer';
-	import { DataSource } from 'marvelous-aurelia-grid/grid/dataSource/dataSource';
-	import { ComponentsArray } from 'marvelous-aurelia-grid/grid/pluginability';
-	import { DOMSettingsReader } from 'marvelous-aurelia-grid/domSettingsReader';
-	import { GridInternals } from 'marvelous-aurelia-grid/grid/gridInternals';
-	import { GridOptions } from 'marvelous-aurelia-grid/grid/gridOptions';
-	export class Grid {
-	    codeDefinedOptions: any;
-	    viewModel: any;
-	    container: Container;
-	    options: GridOptions;
-	    initialized: boolean;
-	    components: ComponentsArray;
-	    dataSource: DataSource;
-	    aureliaUtils: AureliaUtils;
-	    domSettingsReader: DOMSettingsReader;
-	    private _optionsReaderFactory;
-	    optionsReader: OptionsReader;
-	    renderer: GridRenderer;
-	    internals: GridInternals;
-	    subs: (() => void)[];
-	    private _domOptionsElement;
-	    private _stateContainerName;
-	    constructor(element: HTMLElement, components: ComponentsArray, aureliaUtils: AureliaUtils, renderer: GridRenderer, domSettingsReader: DOMSettingsReader, optionsReaderFactory: OptionsReaderFactory, container: Container);
-	    bind(executionContext: any): void;
-	    attached(): void;
-	    detached(): void;
-	    /**
-	     * Subscribes for event with given name.
-	     * @param name Name of the event.
-	     */
-	    subscribe(name: string, callback: (payload: any) => void): void;
-	    /**
-	     * Refreshes the grid.
-	     */
-	    refresh(): void;
-	    /**
-	     * Loads the state of a grid using provided serialized value.
-	     */
-	    loadState(serializedState: string): void;
-	    /**
-	     * Saves the current state of a grid, e.g. groupings, order of columns and so on.
-	     * @returns String which is loadable by loadState method
-	     */
-	    saveState(): string;
-	    private _saveMainGridState(state);
-	    private _loadMainGridState(state);
-	}
-}
-declare module "marvelous-aurelia-grid/grid/models/column" {
-	import { GridInternals } from 'marvelous-aurelia-grid/grid/gridInternals';
-	export class Column {
-	    id: any;
-	    heading: string;
-	    field: string;
-	    width: string;
-	    hidden: any;
-	    other: any;
-	    template: string;
-	    headerClass: string;
-	    owner: Function;
-	    oldOwner: any;
-	    /**
-	     * State of column. Used by components to store some infromation about
-	     * column, e.g. sort order if sorted.
-	     */
-	    state: any;
-	    private _uniqueId;
-	    private _gridInternals;
-	    constructor(id: any, attributes: any, template: string, gridInternals: GridInternals);
-	    validate(): void;
-	    addClass(name: any): void;
-	    removeClass(name: any): void;
-	    hasClass(name: any): boolean;
-	    setOwner(newOwner: any): boolean;
-	    /**
-	     * Provides unique column id. If declared as "explicit-id" on the column
-	     * declaration then this value will be used.
-	     * Otherwise unique id is a combination of field, heading and template.
-	     * In case if these 2 wouldn't be unique then it is required to use "explicit-id".
-	     */
-	    getUniqueId(): string;
-	}
-}
-declare module "marvelous-aurelia-grid/grid/gridOptions" {
-	import { Column } from 'marvelous-aurelia-grid/grid/models/column';
-	import { GridInternals } from 'marvelous-aurelia-grid/grid/gridInternals';
-	import { DOMSettingsReader } from 'marvelous-aurelia-grid/domSettingsReader';
-	import { OptionsReader } from 'marvelous-aurelia-core/optionsReader';
-	export class GridOptions {
-	    private _gridInternals;
-	    reader: OptionsReader;
-	    domBased: DOMSettingsReader;
-	    /**
-	     * Array of all defined columns.
-	     * NOTE: code based defined columns has higher priority.
-	     */
-	    columns: Column[];
-	    /**
-	     * All code based defined options.
-	     */
-	    codeBased: any;
-	    constructor(_gridInternals: GridInternals, reader: OptionsReader, domBased: DOMSettingsReader, codeBasedOptions: any);
-	    validate(): void;
-	    private _parseDomBasedOptions();
-	    private _parseCodeBasedOptions(options);
-	    getColumnById(id: any): Column;
-	    getColumnByUniqueId(uniqueId: string): Column;
-	    getColumnByElement(element: Element): Column;
-	}
-}
-declare module "marvelous-aurelia-grid/grid/components/pagination" {
-	import { DataSource } from 'marvelous-aurelia-grid/grid/dataSource/dataSource';
-	import { AureliaUtils } from 'marvelous-aurelia-core/aureliaUtils';
-	import { GridOptions } from 'marvelous-aurelia-grid/grid/gridOptions';
-	import { GridInternals } from 'marvelous-aurelia-grid/grid/gridInternals';
-	import { GridComponent } from 'marvelous-aurelia-grid/grid/pluginability';
-	export class PaginationComponent extends GridComponent {
-	    private _dataSource;
-	    private _aureliaUtils;
-	    private _gridInternals;
-	    private _gridOptions;
-	    /**
-	     * Page items.
-	     */
-	    items: number[];
-	    /**
-	     * Currently selected page.
-	     */
-	    selected: number;
-	    /**
-	     * Total number of items in data source.
-	     */
-	    total: number;
-	    /**
-	     * Last page. Might be not visible on the UI if is out of range.
-	     */
-	    lastPage: number;
-	    buttons: {
-	        prev: boolean;
-	        next: boolean;
-	        leftSideOutOfRange: boolean;
-	        rightSideOutOfRange: boolean;
-	    };
-	    options: IPaginationOptions;
-	    defaultOptions: IPaginationOptions;
-	    constructor(_dataSource: DataSource, _aureliaUtils: AureliaUtils, _gridInternals: GridInternals, _gridOptions: GridOptions);
-	    start(): void;
-	    changePage(newPage: any): void;
-	    selectFirst(): void;
-	    selectLast(): void;
-	    selectNext(): void;
-	    selectPrev(): void;
-	    private _onDataRead(params);
-	    private _onDataReceived(e);
-	    private _onPageSizeChanged(newVal, oldVal);
-	    createOptions(): IPaginationOptions;
-	}
-	export interface IPaginationOptions {
-	    size?: number;
-	    all?: boolean | number[];
-	    range?: number;
-	}
-}
-declare module "marvelous-aurelia-grid/grid/components/filter-row" {
-	import { GridComponent } from 'marvelous-aurelia-grid/grid/pluginability';
-	import { DataSource } from 'marvelous-aurelia-grid/grid/dataSource/dataSource';
-	import { GridInternals } from 'marvelous-aurelia-grid/grid/gridInternals';
-	import { GridOptions } from 'marvelous-aurelia-grid/grid/gridOptions';
-	import { Column } from 'marvelous-aurelia-grid/grid/models/column';
-	import { AureliaUtils } from 'marvelous-aurelia-core/aureliaUtils';
-	export class FilterRowComponent extends GridComponent {
-	    private _dataSource;
-	    private _aureliaUtils;
-	    private _gridInternals;
-	    private _gridOptions;
-	    private _column;
-	    options: {} | boolean;
-	    type: string;
-	    nullable: boolean;
-	    selectedCompareOperator: ICompareOperator;
-	    compareOperators: ICompareOperator[];
-	    compareText: string;
-	    allCompareOperators: {
-	        [key: string]: ICompareOperator;
-	    };
-	    private _lastSubmittedCompareOperator;
-	    private _lastSubmittedCompareText;
-	    private _prevCompareOperator;
-	    constructor(_dataSource: DataSource, _aureliaUtils: AureliaUtils, _gridInternals: GridInternals, _gridOptions: GridOptions, _column: Column);
-	    start(): void;
-	    saveState(state: any): void;
-	    loadState(state: any): void;
-	    selectCompareOperator(name: string): void;
-	    private _onDataRead(params);
-	    private _getCompareOperators(type, nullable);
-	    refresh(): void;
-	    private _selectedCompareOperatorChanged(newOp, oldOp);
-	    private _onCompareTextWrite(event);
-	    createOptions(): {};
-	}
-	export interface IFilterRowState {
-	    selectedCompareOperator: any;
-	    compareText: string;
-	}
-	export interface ICompareOperator {
-	    name: string;
-	    value: string;
-	    /**
-	     * Indicate that compare operator needs text to compare.
-	     * E.g. `Equal` needs, but `IsTrue` doesn't.
-	     */
-	    textRequired: boolean;
-	}
-}
-declare module "marvelous-aurelia-grid/grid/components/sorting" {
+declare module "marvelous-aurelia-grid/grid/components/sorting/sorting" {
 	import { Column } from 'marvelous-aurelia-grid/grid/models/column';
 	import { GridComponent } from 'marvelous-aurelia-grid/grid/pluginability';
-	import { GridOptions } from 'marvelous-aurelia-grid/grid/gridOptions';
-	import { GridInternals } from 'marvelous-aurelia-grid/grid/gridInternals';
-	import { DataSource } from 'marvelous-aurelia-grid/grid/dataSource/dataSource';
+	import { GridOptions } from 'marvelous-aurelia-grid/grid/grid-options';
+	import { GridInternals } from 'marvelous-aurelia-grid/grid/grid-internals';
+	import { DataSource } from 'marvelous-aurelia-grid/grid/data-source/data-source';
 	export class SortingComponent extends GridComponent {
 	    private _gridOptions;
 	    private _gridInternals;
@@ -656,7 +395,10 @@ declare module "marvelous-aurelia-grid/grid/components/sorting" {
 	    alwaysSorted: boolean;
 	}
 }
-declare module "marvelous-aurelia-grid/grid/components/grouping" {
+declare module "marvelous-aurelia-grid/grid/components/sorting" {
+	export * from 'marvelous-aurelia-grid/grid/components/sorting/sorting';
+}
+declare module "marvelous-aurelia-grid/grid/components/grouping/grouping" {
 	import { Column, GridComponent, ComponentsArray, GridOptions, GridInternals } from 'marvelous-aurelia-grid/grid/all';
 	export class GroupingComponent extends GridComponent {
 	    private _components;
@@ -689,7 +431,329 @@ declare module "marvelous-aurelia-grid/grid/components/grouping" {
 	    direction: string;
 	}
 }
-declare module "marvelous-aurelia-grid/grid/components/query-language" {
+declare module "marvelous-aurelia-grid/grid/components/grouping" {
+	export * from 'marvelous-aurelia-grid/grid/components/grouping/grouping';
+}
+declare module "marvelous-aurelia-grid/grid/grid-renderer" {
+	import { Column } from 'marvelous-aurelia-grid/grid/models/column';
+	import { Grid } from 'marvelous-aurelia-grid/grid/grid';
+	import { Compiler } from 'marvelous-aurelia-core/compiler';
+	export class GridRenderer {
+	    rows: DataRow[];
+	    groups: any[];
+	    tableDataViewFactory: any;
+	    grid: Grid;
+	    compiler: Compiler;
+	    constructor(compiler: Compiler);
+	    init(grid: Grid): void;
+	    render(): void;
+	    private createRows();
+	}
+	export let rowTypes: {
+	    group: string;
+	    data: string;
+	};
+	export interface IDataRow {
+	    grid: Grid;
+	    type: string;
+	    column?: Column;
+	    value?: any;
+	    level: Number;
+	    data?: any;
+	}
+	export class DataRow implements IDataRow {
+	    grid: Grid;
+	    type: string;
+	    column: Column;
+	    value: any;
+	    level: Number;
+	    data: any;
+	    classes: string;
+	    constructor(row: IDataRow);
+	    addClass(name: any): void;
+	    removeClass(name: any): void;
+	    hasClass(name: any): boolean;
+	}
+	export interface IRowClickEvent {
+	    nativeEvent: MouseEvent;
+	    row: DataRow;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/data-source/client-side-data-source" {
+	import { DataSource, IDataSourceResult } from 'marvelous-aurelia-grid/grid/all';
+	export class ClientSideDataSource extends DataSource {
+	    static modeName: string;
+	    transformResult(result: any, params: any): IDataSourceResult;
+	    addItem(item: any): void;
+	    removeItem(item: any): void;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/data-source/server-side-data-source" {
+	import { DataSource, IDataSourceResult } from 'marvelous-aurelia-grid/grid/all';
+	export class ServerSideDataSource extends DataSource {
+	    static modeName: string;
+	    private _getOnlyVisible;
+	    constructor(grid: any, options: any);
+	    /**
+	     * Serializes parameters.
+	     */
+	    beforeRead(params: any): {
+	        marvelousParams: string;
+	    };
+	    transformResult(result: any, params: any): IDataSourceResult;
+	    addItem(item: any): void;
+	    removeItem(item: any): void;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/data-source/data-source-manager" {
+	import { Grid } from 'marvelous-aurelia-grid/grid/grid';
+	export class DataSourceManager {
+	    grid: Grid;
+	    private _dataSources;
+	    private _options;
+	    constructor(grid: Grid);
+	    add(mode: any, create: any): void;
+	    createDataSource(): any;
+	    createOptions(): any;
+	    static createReadMethod(read: any): any;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/grid" {
+	import { Container } from 'aurelia-dependency-injection';
+	import { OptionsReaderFactory, OptionsReader } from 'marvelous-aurelia-core/optionsReader';
+	import { AureliaUtils } from 'marvelous-aurelia-core/aureliaUtils';
+	import { GridRenderer } from 'marvelous-aurelia-grid/grid/grid-renderer';
+	import { DataSource } from 'marvelous-aurelia-grid/grid/data-source/data-source';
+	import { ComponentsArray } from 'marvelous-aurelia-grid/grid/pluginability';
+	import { DOMSettingsReader } from 'marvelous-aurelia-grid/domSettingsReader';
+	import { GridInternals } from 'marvelous-aurelia-grid/grid/grid-internals';
+	import { GridOptions } from 'marvelous-aurelia-grid/grid/grid-options';
+	import { SelectionComponent } from 'marvelous-aurelia-grid/grid/components';
+	export class Grid {
+	    codeDefinedOptions: any;
+	    viewModel: any;
+	    container: Container;
+	    options: GridOptions;
+	    initialized: boolean;
+	    components: ComponentsArray;
+	    dataSource: DataSource;
+	    aureliaUtils: AureliaUtils;
+	    domSettingsReader: DOMSettingsReader;
+	    private _optionsReaderFactory;
+	    optionsReader: OptionsReader;
+	    renderer: GridRenderer;
+	    internals: GridInternals;
+	    subs: (() => void)[];
+	    selection: SelectionComponent;
+	    private _domOptionsElement;
+	    private _stateContainerName;
+	    constructor(element: HTMLElement, components: ComponentsArray, aureliaUtils: AureliaUtils, renderer: GridRenderer, domSettingsReader: DOMSettingsReader, optionsReaderFactory: OptionsReaderFactory, container: Container);
+	    /**
+	     * Refreshes grid translations.
+	     */
+	    static refreshTranslations(): void;
+	    /**
+	     * Changes the current language and refreshes translations instantly.
+	     */
+	    static changeLanguage(language: any): void;
+	    bind(executionContext: any): void;
+	    attached(): void;
+	    detached(): void;
+	    /**
+	     * Subscribes for event with given name.
+	     * @param name Name of the event.
+	     */
+	    subscribe(name: string, callback: (payload: any) => void): void;
+	    /**
+	     * Refreshes the grid.
+	     */
+	    refresh(): void;
+	    /**
+	     * Loads the state of a grid using provided serialized value.
+	     */
+	    loadState(serializedState: string): void;
+	    /**
+	     * Saves the current state of a grid, e.g. groupings, order of columns and so on.
+	     * @returns String which is loadable by loadState method
+	     */
+	    saveState(): string;
+	    private _saveMainGridState(state);
+	    private _loadMainGridState(state);
+	}
+}
+declare module "marvelous-aurelia-grid/grid/models/column" {
+	import { GridInternals } from 'marvelous-aurelia-grid/grid/grid-internals';
+	export class Column {
+	    id: any;
+	    heading: string;
+	    field: string;
+	    width: string;
+	    hidden: any;
+	    other: any;
+	    template: string;
+	    headerClass: string;
+	    owner: Function;
+	    oldOwner: any;
+	    /**
+	     * State of column. Used by components to store some infromation about
+	     * column, e.g. sort order if sorted.
+	     */
+	    state: any;
+	    private _uniqueId;
+	    private _gridInternals;
+	    constructor(id: any, attributes: any, template: string, gridInternals: GridInternals);
+	    validate(): void;
+	    addClass(name: any): void;
+	    removeClass(name: any): void;
+	    hasClass(name: any): boolean;
+	    setOwner(newOwner: any): boolean;
+	    /**
+	     * Provides unique column id. If declared as "explicit-id" on the column
+	     * declaration then this value will be used.
+	     * Otherwise unique id is a combination of field, heading and template.
+	     * In case if these 2 wouldn't be unique then it is required to use "explicit-id".
+	     */
+	    getUniqueId(): string;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/grid-options" {
+	import { Column } from 'marvelous-aurelia-grid/grid/models/column';
+	import { GridInternals } from 'marvelous-aurelia-grid/grid/grid-internals';
+	import { DOMSettingsReader } from 'marvelous-aurelia-grid/domSettingsReader';
+	import { OptionsReader } from 'marvelous-aurelia-core/optionsReader';
+	export class GridOptions {
+	    private _gridInternals;
+	    reader: OptionsReader;
+	    domBased: DOMSettingsReader;
+	    /**
+	     * Array of all defined columns.
+	     * NOTE: code based defined columns has higher priority.
+	     */
+	    columns: Column[];
+	    /**
+	     * All code based defined options.
+	     */
+	    codeBased: any;
+	    constructor(_gridInternals: GridInternals, reader: OptionsReader, domBased: DOMSettingsReader, codeBasedOptions: any);
+	    validate(): void;
+	    private _parseDomBasedOptions();
+	    private _parseCodeBasedOptions(options);
+	    getColumnById(id: any): Column;
+	    getColumnByUniqueId(uniqueId: string): Column;
+	    getColumnByElement(element: Element): Column;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/components/pagination/pagination" {
+	import { AureliaUtils } from 'marvelous-aurelia-core/aureliaUtils';
+	import { DataSource } from 'marvelous-aurelia-grid/grid/data-source/data-source';
+	import { GridOptions } from 'marvelous-aurelia-grid/grid/grid-options';
+	import { GridInternals } from 'marvelous-aurelia-grid/grid/grid-internals';
+	import { GridComponent } from 'marvelous-aurelia-grid/grid/pluginability';
+	export class PaginationComponent extends GridComponent {
+	    private _dataSource;
+	    private _aureliaUtils;
+	    private _gridInternals;
+	    private _gridOptions;
+	    /**
+	     * Page items.
+	     */
+	    items: number[];
+	    /**
+	     * Currently selected page.
+	     */
+	    selected: number;
+	    /**
+	     * Total number of items in data source.
+	     */
+	    total: number;
+	    /**
+	     * Last page. Might be not visible on the UI if is out of range.
+	     */
+	    lastPage: number;
+	    buttons: {
+	        prev: boolean;
+	        next: boolean;
+	        leftSideOutOfRange: boolean;
+	        rightSideOutOfRange: boolean;
+	    };
+	    options: IPaginationOptions;
+	    defaultOptions: IPaginationOptions;
+	    constructor(_dataSource: DataSource, _aureliaUtils: AureliaUtils, _gridInternals: GridInternals, _gridOptions: GridOptions);
+	    start(): void;
+	    changePage(newPage: any): void;
+	    selectFirst(): void;
+	    selectLast(): void;
+	    selectNext(): void;
+	    selectPrev(): void;
+	    private _onDataRead(params);
+	    private _onDataReceived(e);
+	    private _onPageSizeChanged(newVal, oldVal);
+	    createOptions(): IPaginationOptions;
+	}
+	export interface IPaginationOptions {
+	    size?: number;
+	    all?: boolean | number[];
+	    range?: number;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/components/pagination" {
+	export * from 'marvelous-aurelia-grid/grid/components/pagination/pagination';
+}
+declare module "marvelous-aurelia-grid/grid/components/filter-row/filter-row" {
+	import { GridComponent } from 'marvelous-aurelia-grid/grid/pluginability';
+	import { DataSource } from 'marvelous-aurelia-grid/grid/data-source/data-source';
+	import { GridInternals } from 'marvelous-aurelia-grid/grid/grid-internals';
+	import { GridOptions } from 'marvelous-aurelia-grid/grid/grid-options';
+	import { Column } from 'marvelous-aurelia-grid/grid/models/column';
+	import { AureliaUtils } from 'marvelous-aurelia-core/aureliaUtils';
+	export class FilterRowComponent extends GridComponent {
+	    private _dataSource;
+	    private _aureliaUtils;
+	    private _gridInternals;
+	    private _gridOptions;
+	    private _column;
+	    options: {} | boolean;
+	    type: string;
+	    nullable: boolean;
+	    selectedCompareOperator: ICompareOperator;
+	    compareOperators: ICompareOperator[];
+	    compareText: string;
+	    allCompareOperators: {
+	        [key: string]: ICompareOperator;
+	    };
+	    private _lastSubmittedCompareOperator;
+	    private _lastSubmittedCompareText;
+	    private _prevCompareOperator;
+	    constructor(_dataSource: DataSource, _aureliaUtils: AureliaUtils, _gridInternals: GridInternals, _gridOptions: GridOptions, _column: Column);
+	    start(): void;
+	    saveState(state: any): void;
+	    loadState(state: any): void;
+	    selectCompareOperator(name: string): void;
+	    private _onDataRead(params);
+	    private _getCompareOperators(type, nullable);
+	    refresh(): void;
+	    private _selectedCompareOperatorChanged(newOp, oldOp);
+	    private _onCompareTextWrite(event);
+	    createOptions(): {};
+	}
+	export interface IFilterRowState {
+	    selectedCompareOperator: any;
+	    compareText: string;
+	}
+	export interface ICompareOperator {
+	    name: string;
+	    value: string;
+	    /**
+	     * Indicate that compare operator needs text to compare.
+	     * E.g. `Equal` needs, but `IsTrue` doesn't.
+	     */
+	    textRequired: boolean;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/components/filter-row" {
+	export * from 'marvelous-aurelia-grid/grid/components/filter-row/filter-row';
+}
+declare module "marvelous-aurelia-grid/grid/components/query-language/query-language" {
 	import { GridComponent, GridOptions, GridInternals, DataSource, ComponentsArray } from 'marvelous-aurelia-grid/grid/all';
 	import { IQueryLanguageOptions, QueryLanguage } from 'marvelous-aurelia-query-language';
 	export class QueryLanguageComponent extends GridComponent {
@@ -708,7 +772,10 @@ declare module "marvelous-aurelia-grid/grid/components/query-language" {
 	    createOptions(): any;
 	}
 }
-declare module "marvelous-aurelia-grid/grid/components/column-chooser" {
+declare module "marvelous-aurelia-grid/grid/components/query-language" {
+	export * from 'marvelous-aurelia-grid/grid/components/query-language/query-language';
+}
+declare module "marvelous-aurelia-grid/grid/components/column-chooser/column-chooser" {
 	import { Column, GridComponent, GridInternals, GridOptions, ComponentsArray } from 'marvelous-aurelia-grid/grid/all';
 	export class ColumnChooserComponent extends GridComponent {
 	    private _gridInternals;
@@ -740,7 +807,10 @@ declare module "marvelous-aurelia-grid/grid/components/column-chooser" {
 	    autoToolboxInit: boolean;
 	}
 }
-declare module "marvelous-aurelia-grid/grid/components/toolbox" {
+declare module "marvelous-aurelia-grid/grid/components/column-chooser" {
+	export * from 'marvelous-aurelia-grid/grid/components/column-chooser/column-chooser';
+}
+declare module "marvelous-aurelia-grid/grid/components/toolbox/toolbox" {
 	import { GridComponent, GridOptions } from 'marvelous-aurelia-grid/grid/all';
 	export class ToolboxComponent extends GridComponent {
 	    private _gridOptions;
@@ -750,10 +820,13 @@ declare module "marvelous-aurelia-grid/grid/components/toolbox" {
 	    createOptions(): {};
 	}
 }
-declare module "marvelous-aurelia-grid/grid/components/column-reordering" {
+declare module "marvelous-aurelia-grid/grid/components/toolbox" {
+	export * from 'marvelous-aurelia-grid/grid/components/toolbox/toolbox';
+}
+declare module "marvelous-aurelia-grid/grid/components/column-reordering/column-reordering" {
 	import { GridComponent } from 'marvelous-aurelia-grid/grid/pluginability';
-	import { GridOptions } from 'marvelous-aurelia-grid/grid/gridOptions';
-	import { GridInternals } from 'marvelous-aurelia-grid/grid/gridInternals';
+	import { GridOptions } from 'marvelous-aurelia-grid/grid/grid-options';
+	import { GridInternals } from 'marvelous-aurelia-grid/grid/grid-internals';
 	export class ColumnReorderingComponent extends GridComponent {
 	    private _gridOptions;
 	    private _gridInternals;
@@ -775,13 +848,37 @@ declare module "marvelous-aurelia-grid/grid/components/column-reordering" {
 	    createOptions(): {};
 	}
 }
-declare module "marvelous-aurelia-grid/grid/interfaces" {
-	export interface IDataSourceResult {
-	    data: any[];
-	    total: number;
+declare module "marvelous-aurelia-grid/grid/components/column-reordering" {
+	export * from 'marvelous-aurelia-grid/grid/components/column-reordering/column-reordering';
+}
+declare module "marvelous-aurelia-grid/grid/components/common-imports" {
+	export { DataSource } from 'marvelous-aurelia-grid/grid/data-source/data-source';
+	export { GridOptions } from 'marvelous-aurelia-grid/grid/grid-options';
+	export { GridInternals } from 'marvelous-aurelia-grid/grid/grid-internals';
+	export { GridComponent } from 'marvelous-aurelia-grid/grid/pluginability';
+}
+declare module "marvelous-aurelia-grid/grid/components/selection/selection" {
+	import { DataSource, GridOptions, GridInternals, GridComponent } from 'marvelous-aurelia-grid/grid/components/common-imports';
+	export class SelectionComponent extends GridComponent {
+	    private _gridInternals;
+	    private _gridOptions;
+	    private _dataSource;
+	    options: ISelectionOptions;
+	    selectedItems: any[];
+	    constructor(_gridInternals: GridInternals, _gridOptions: GridOptions, _dataSource: DataSource);
+	    start(): void;
+	    clear(): void;
+	    private _onRowClick(event);
+	    createOptions(): ISelectionOptions;
+	}
+	export interface ISelectionOptions {
+	    multiple: boolean;
 	}
 }
-declare module "marvelous-aurelia-grid/grid/all" {
+declare module "marvelous-aurelia-grid/grid/components/selection" {
+	export * from 'marvelous-aurelia-grid/grid/components/selection/selection';
+}
+declare module "marvelous-aurelia-grid/grid/components" {
 	export * from 'marvelous-aurelia-grid/grid/components/pagination';
 	export * from 'marvelous-aurelia-grid/grid/components/filter-row';
 	export * from 'marvelous-aurelia-grid/grid/components/sorting';
@@ -790,21 +887,31 @@ declare module "marvelous-aurelia-grid/grid/all" {
 	export * from 'marvelous-aurelia-grid/grid/components/column-chooser';
 	export * from 'marvelous-aurelia-grid/grid/components/toolbox';
 	export * from 'marvelous-aurelia-grid/grid/components/column-reordering';
-	export * from 'marvelous-aurelia-grid/grid/dataSource/dataSource';
-	export * from 'marvelous-aurelia-grid/grid/dataSource/dataSourceManager';
-	export * from 'marvelous-aurelia-grid/grid/dataSource/clientSideDataSource';
-	export * from 'marvelous-aurelia-grid/grid/dataSource/serverSideDataSource';
+	export * from 'marvelous-aurelia-grid/grid/components/selection';
+}
+declare module "marvelous-aurelia-grid/grid/interfaces" {
+	export interface IDataSourceResult {
+	    data: any[];
+	    total: number;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/all" {
+	export * from 'marvelous-aurelia-grid/grid/components';
+	export * from 'marvelous-aurelia-grid/grid/data-source/data-source';
+	export * from 'marvelous-aurelia-grid/grid/data-source/data-source-manager';
+	export * from 'marvelous-aurelia-grid/grid/data-source/client-side-data-source';
+	export * from 'marvelous-aurelia-grid/grid/data-source/server-side-data-source';
 	export * from 'marvelous-aurelia-grid/grid/models/column';
 	export * from 'marvelous-aurelia-grid/grid/constants';
 	export * from 'marvelous-aurelia-grid/grid/column';
 	export * from 'marvelous-aurelia-grid/grid/grid';
-	export * from 'marvelous-aurelia-grid/grid/gridRenderer';
+	export * from 'marvelous-aurelia-grid/grid/grid-renderer';
 	export * from 'marvelous-aurelia-grid/grid/interfaces';
 	export * from 'marvelous-aurelia-grid/grid/pluginability';
-	export * from 'marvelous-aurelia-grid/grid/gridInternals';
-	export * from 'marvelous-aurelia-grid/grid/gridOptions';
+	export * from 'marvelous-aurelia-grid/grid/grid-internals';
+	export * from 'marvelous-aurelia-grid/grid/grid-options';
 }
-declare module "marvelous-aurelia-grid/grid/dataSource/dataSource" {
+declare module "marvelous-aurelia-grid/grid/data-source/data-source" {
 	import { Grid, IDataSourceResult } from 'marvelous-aurelia-grid/grid/all';
 	export class DataSource {
 	    options: any;
@@ -848,16 +955,16 @@ declare module "marvelous-aurelia-grid/grid/dataSource/dataSource" {
 	}
 }
 declare module "marvelous-aurelia-grid" {
-	export function configure(aurelia: any): void;
-	export { IReadContext } from 'marvelous-aurelia-grid/grid/dataSource/dataSource';
+	export function configure(aurelia: any, configFunc: any): void;
+	export { IReadContext } from 'marvelous-aurelia-grid/grid/data-source/data-source';
+	export { IGridConfig } from 'marvelous-aurelia-grid/grid/config';
 	export * from 'marvelous-aurelia-grid/grid/constants';
 	export * from 'marvelous-aurelia-grid/grid/column';
 	export * from 'marvelous-aurelia-grid/grid/grid';
-	export * from 'marvelous-aurelia-grid/grid/gridRenderer';
 	export * from 'marvelous-aurelia-grid/grid/interfaces';
 	export * from 'marvelous-aurelia-grid/grid/pluginability';
-	export * from 'marvelous-aurelia-grid/grid/gridInternals';
-	export * from 'marvelous-aurelia-grid/grid/gridOptions';
+	export * from 'marvelous-aurelia-grid/grid/grid-internals';
+	export * from 'marvelous-aurelia-grid/grid/grid-options';
 }
 declare module "marvelous-aurelia-grid/dragAndDrop/draggable" {
 	export class DraggableCustomAttribute {
@@ -866,5 +973,11 @@ declare module "marvelous-aurelia-grid/dragAndDrop/draggable" {
 	    constructor(_element: HTMLElement);
 	    attached(): void;
 	    detached(): void;
+	}
+}
+declare module "marvelous-aurelia-grid/grid/converters/translate" {
+	export class TranslateValueConverter {
+	    toView(value: any): any;
+	    translate(key: string, lang: string): any;
 	}
 }
