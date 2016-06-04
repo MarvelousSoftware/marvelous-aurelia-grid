@@ -4,11 +4,11 @@ import {gridConfig} from '../config';
 @valueConverter('mGridTranslate')
 export class TranslateValueConverter {
   toView(value) {
-    return this.translate(value, gridConfig.language);
+    return this.translate(value, gridConfig.localization.language);
   }
   
   translate(key: string, lang: string) {
-    let translations = gridConfig.translations[lang];
+    let translations = gridConfig.localization.translations[lang];
     
     if (!!translations === false) {
       throw new Error(`Translations for '${lang}' language has been not found.`);
@@ -18,8 +18,8 @@ export class TranslateValueConverter {
       return translations[key];
     }
     
-    if(lang !== gridConfig.fallbackLanguage) {
-      return this.translate(key, gridConfig.fallbackLanguage);
+    if(lang !== gridConfig.localization.fallbackLanguage) {
+      return this.translate(key, gridConfig.localization.fallbackLanguage);
     }
     
     return key;

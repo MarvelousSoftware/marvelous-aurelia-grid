@@ -77,7 +77,7 @@ export class Grid {
    * Changes the current language and refreshes translations instantly.
    */
   static changeLanguage(language) {
-    gridConfig.language = language;
+    gridConfig.localization.language = language;
     Grid.refreshTranslations();
   }
   
